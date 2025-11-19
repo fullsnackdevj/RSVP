@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mhel & James | Wedding RSVP</title>
+
+    <!-- Google Fonts: DM Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap"
+      rel="stylesheet" />
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'min-cream': '#FDFBF7',
+              'min-rose': '#EACBCB',
+              'min-sage': '#9CAF88',
+              'min-charcoal': '#2A2A2A',
+              'min-gray': '#8A8A8A',
+            },
+            fontFamily: {
+              sans: ['"DM Sans"', 'sans-serif'],
+            },
+            spacing: {
+              128: '32rem',
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      /* Custom Utilities */
+      body {
+        background-color: #ffffff;
+        color: #2a2a2a;
+      }
+
+      /* Button Base Style */
+      .btn-outline {
+        border: 1px solid #2a2a2a;
+        background-color: transparent;
+        color: #2a2a2a;
+        padding: 1rem 2.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        font-size: 0.75rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .btn-outline:hover {
+        background-color: #2a2a2a;
+        color: #ffffff;
+      }
+
+      /* Minimalist Inputs */
+      .input-minimal {
+        width: 100%;
+        border: 1px solid #e5e5e5;
+        background: transparent;
+        padding: 1rem;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 300;
+        transition: border-color 0.3s;
+        outline: none;
+      }
+      .input-minimal:focus {
+        border-color: #9caf88;
+      }
+    </style>
+  </head>
+  <body
+    class="font-sans antialiased overflow-x-hidden text-min-charcoal selection:bg-min-sage selection:text-white">
+    <!-- Navigation: Ultra Minimal -->
+    <nav
+      class="fixed w-full z-50 py-6 bg-white/90 backdrop-blur-sm transition-all"
+      id="navbar">
+      <div class="max-w-7xl mx-auto px-8 flex justify-between items-center">
+        <a href="#" class="text-xl tracking-[0.2em] font-light uppercase"
+          >Mhel & James</a
+        >
+
+        <!-- Desktop Links -->
+        <div
+          class="hidden md:flex space-x-12 text-xs uppercase tracking-[0.15em] font-medium text-gray-500">
+          <a href="#attire" class="hover:text-min-charcoal transition-colors"
+            >Attire</a
+          >
+          <a href="#faqs" class="hover:text-min-charcoal transition-colors"
+            >FAQs</a
+          >
+          <a
+            href="#rsvp"
+            class="hover:text-min-sage transition-colors text-min-charcoal border-b border-transparent hover:border-min-sage pb-1"
+            >RSVP</a
+          >
+        </div>
+
+        <!-- Mobile Menu Icon -->
+        <button
+          id="mobile-menu-btn"
+          class="md:hidden space-y-1.5 group focus:outline-none">
+          <div
+            class="w-6 h-px bg-min-charcoal transition-all group-hover:w-4"></div>
+          <div class="w-6 h-px bg-min-charcoal"></div>
+          <div
+            class="w-6 h-px bg-min-charcoal transition-all group-hover:w-4 ml-auto"></div>
+        </button>
+      </div>
+      <!-- Mobile Menu Overlay -->
+      <div
+        id="mobile-menu"
+        class="fixed inset-0 bg-white z-40 hidden flex-col justify-center items-center space-y-8 text-xl uppercase tracking-widest font-light">
+        <a href="#attire" class="mobile-link hover:text-min-sage">Attire</a>
+        <a href="#faqs" class="mobile-link hover:text-min-sage">FAQs</a>
+        <a href="#rsvp" class="mobile-link hover:text-min-sage">RSVP</a>
+        <button id="close-menu" class="absolute top-8 right-8 text-3xl">
+          &times;
+        </button>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header
+      class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20">
+      <div data-aos="fade-up" data-aos-duration="1200">
+        <p
+          class="text-xs md:text-sm uppercase tracking-[0.4em] text-gray-400 mb-8">
+          Bear witness to our special day
+        </p>
+
+        <h1
+          class="text-6xl md:text-8xl font-light leading-tight mb-6 tracking-tight">
+          MHEL <span class="text-min-sage font-thin">&</span> JAMES
+        </h1>
+
+        <p
+          class="text-lg md:text-xl font-light text-gray-500 mb-8 tracking-wide">
+          January 04, 2025 <span class="mx-4 text-gray-300">|</span> White Plate
+        </p>
+
+        <p class="text-xs uppercase tracking-[0.2em] text-gray-400 mb-16">
+          2402 Katipunan Ext, Quezon City
+        </p>
+
+        <div class="flex flex-col md:flex-row gap-6 justify-center">
+          <a href="#rsvp" class="btn-outline"> RSVP Now </a>
+          <a
+            href="#attire"
+            class="text-xs uppercase tracking-[0.2em] border-b border-gray-300 pb-1 hover:border-gray-800 hover:text-gray-800 transition-all text-gray-400 self-center mt-4 md:mt-0">
+            View Attire
+          </a>
+        </div>
+      </div>
+
+      <!-- Quote from Image -->
+      <div
+        class="absolute bottom-12 text-center px-4 opacity-60"
+        data-aos="fade-in"
+        data-aos-delay="500">
+        <p class="text-sm md:text-base italic font-light">
+          "Your presence at our wedding is the only present we require."
+        </p>
+      </div>
+    </header>
+
+    <!-- Image Section (Couple) -->
+    <section class="py-20 px-6">
+      <div class="max-w-7xl mx-auto relative">
+        <div
+          class="aspect-[16/9] md:aspect-[21/9] overflow-hidden"
+          data-aos="zoom-in">
+          <!-- Placeholder for the image from the file (Couple holding hands/rings) -->
+          <img
+            src="https://placehold.co/1920x800/EACBCB/fff?text=Mhel+and+James"
+            class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Attire Section -->
+    <section id="attire" class="py-32 bg-min-cream">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <span
+          class="text-xs uppercase tracking-[0.3em] text-gray-400 block mb-6"
+          >Dress Code</span
+        >
+        <h2 class="text-4xl md:text-5xl font-light mb-12">
+          Formal / Semi-Formal
+        </h2>
+
+        <p
+          class="text-gray-500 font-light leading-loose text-lg mb-16 max-w-2xl mx-auto">
+          In celebration of our Union and Forever Wedding, we kindly request our
+          guests to honor the formality of the event. Please wear pastel or
+          neutral tones.
+        </p>
+
+        <!-- Color Palette Swatches -->
+        <div class="flex justify-center gap-8 mb-16" data-aos="fade-up">
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-16 h-16 bg-[#EACBCB] border border-gray-200"></div>
+            <span class="text-[10px] uppercase tracking-widest text-gray-400"
+              >Blush</span
+            >
+          </div>
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-16 h-16 bg-[#F5E6D3] border border-gray-200"></div>
+            <span class="text-[10px] uppercase tracking-widest text-gray-400"
+              >Cream</span
+            >
+          </div>
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-16 h-16 bg-[#9CAF88] border border-gray-200"></div>
+            <span class="text-[10px] uppercase tracking-widest text-gray-400"
+              >Sage</span
+            >
+          </div>
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-16 h-16 bg-[#D8E2DC] border border-gray-200"></div>
+            <span class="text-[10px] uppercase tracking-widest text-gray-400"
+              >Mist</span
+            >
+          </div>
+        </div>
+
+        <div class="p-8 border border-min-charcoal/10 inline-block">
+          <p
+            class="text-xs uppercase tracking-[0.2em] mb-4 text-min-charcoal font-medium">
+            Please Avoid
+          </p>
+          <p class="text-sm text-gray-500 font-light">
+            White, Bright Red, and Neon Colors
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Entourage / Wordings Section -->
+    <section class="py-32 px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-20">
+          <h2 class="text-3xl font-light tracking-wide">The Wedding Party</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-20 text-center md:text-left">
+          <!-- Principal Sponsors -->
+          <div data-aos="fade-up">
+            <h3
+              class="text-sm uppercase tracking-[0.2em] text-min-sage mb-8 font-bold">
+              Principal Sponsors
+            </h3>
+            <ul class="space-y-4 text-gray-500 font-light text-lg">
+              <li>Mr. Juan Dela Cruz</li>
+              <li>Ms. Maria Clara</li>
+              <li>Mr. Jose Rizal</li>
+              <li>Mrs. Leonor Rivera</li>
+              <!-- Add more from actual content if legible -->
+            </ul>
+          </div>
+
+          <!-- Secondary Sponsors / Bridesmaids -->
+          <div data-aos="fade-up" data-aos-delay="100">
+            <h3
+              class="text-sm uppercase tracking-[0.2em] text-min-sage mb-8 font-bold">
+              The Entourage
+            </h3>
+            <div class="space-y-8">
+              <div>
+                <p
+                  class="text-min-charcoal font-medium uppercase text-xs tracking-widest mb-2">
+                  Maid of Honor
+                </p>
+                <p class="text-gray-500 font-light">Anna Beatrice</p>
+              </div>
+              <div>
+                <p
+                  class="text-min-charcoal font-medium uppercase text-xs tracking-widest mb-2">
+                  Best Man
+                </p>
+                <p class="text-gray-500 font-light">Marco Antonio</p>
+              </div>
+              <div>
+                <p
+                  class="text-min-charcoal font-medium uppercase text-xs tracking-widest mb-2">
+                  Bridesmaids
+                </p>
+                <p class="text-gray-500 font-light">Julia, Sarah, Mika</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQs Section -->
+    <section id="faqs" class="py-32 bg-min-cream px-6">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-24">
+          <span
+            class="text-xs uppercase tracking-[0.3em] text-gray-400 block mb-4"
+            >Information</span
+          >
+          <h2 class="text-3xl md:text-4xl font-light">
+            Frequently Asked Questions
+          </h2>
+        </div>
+
+        <div class="space-y-12">
+          <!-- Q1 -->
+          <div
+            class="grid md:grid-cols-12 gap-6 border-b border-gray-200 pb-12"
+            data-aos="fade-up">
+            <div class="md:col-span-4">
+              <h3 class="text-lg font-medium text-min-charcoal">
+                What time should we arrive?
+              </h3>
+            </div>
+            <div class="md:col-span-8">
+              <p class="text-gray-500 font-light leading-relaxed">
+                The ceremony will start promptly at 3:00 PM. We kindly request
+                that guests arrive at least 30 minutes early to be seated
+                comfortably.
+              </p>
+            </div>
+          </div>
+
+          <!-- Q2 -->
+          <div
+            class="grid md:grid-cols-12 gap-6 border-b border-gray-200 pb-12"
+            data-aos="fade-up">
+            <div class="md:col-span-4">
+              <h3 class="text-lg font-medium text-min-charcoal">
+                Where is the event?
+              </h3>
+            </div>
+            <div class="md:col-span-8">
+              <p class="text-gray-500 font-light leading-relaxed">
+                Both the ceremony and reception will be held at White Plate,
+                2402 Katipunan Ext, Quezon City.
+              </p>
+            </div>
+          </div>
+
+          <!-- Q3 -->
+          <div
+            class="grid md:grid-cols-12 gap-6 border-b border-gray-200 pb-12"
+            data-aos="fade-up">
+            <div class="md:col-span-4">
+              <h3 class="text-lg font-medium text-min-charcoal">
+                Can I bring a +1?
+              </h3>
+            </div>
+            <div class="md:col-span-8">
+              <p class="text-gray-500 font-light leading-relaxed">
+                We have reserved seats for the number of guests stated in your
+                invitation to keep our wedding intimate.
+              </p>
+            </div>
+          </div>
+
+          <!-- Q4 -->
+          <div
+            class="grid md:grid-cols-12 gap-6 border-b border-gray-200 pb-12"
+            data-aos="fade-up">
+            <div class="md:col-span-4">
+              <h3 class="text-lg font-medium text-min-charcoal">
+                Are children allowed?
+              </h3>
+            </div>
+            <div class="md:col-span-8">
+              <p class="text-gray-500 font-light leading-relaxed">
+                We love your little ones, however, this is an adults-only affair
+                unless specified in the invitation. Thank you for understanding.
+              </p>
+            </div>
+          </div>
+
+          <!-- Q5 -->
+          <div
+            class="grid md:grid-cols-12 gap-6 border-b border-gray-200 pb-12"
+            data-aos="fade-up">
+            <div class="md:col-span-4">
+              <h3 class="text-lg font-medium text-min-charcoal">
+                Is parking available?
+              </h3>
+            </div>
+            <div class="md:col-span-8">
+              <p class="text-gray-500 font-light leading-relaxed">
+                Yes, parking is available at the venue. We recommend carpooling
+                where possible.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RSVP Section -->
+    <section
+      id="rsvp"
+      class="py-40 px-6 bg-white relative border-t border-gray-100">
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-light mb-4">R.S.V.P.</h2>
+          <p class="text-gray-500 font-light">
+            We kindly request your response by November 30, 2024
+          </p>
+        </div>
+
+        <form id="rsvpForm" class="space-y-8">
+          <div class="grid md:grid-cols-2 gap-8">
+            <div>
+              <label
+                class="block text-xs uppercase tracking-widest text-gray-400 mb-3"
+                >First Name</label
+              >
+              <input type="text" class="input-minimal" required />
+            </div>
+            <div>
+              <label
+                class="block text-xs uppercase tracking-widest text-gray-400 mb-3"
+                >Last Name</label
+              >
+              <input type="text" class="input-minimal" required />
+            </div>
+          </div>
+
+          <div>
+            <label
+              class="block text-xs uppercase tracking-widest text-gray-400 mb-3"
+              >Email Address</label
+            >
+            <input type="email" class="input-minimal" required />
+          </div>
+
+          <div class="pt-4">
+            <span
+              class="block text-xs uppercase tracking-widest text-gray-400 mb-4"
+              >Attendance</span
+            >
+            <div class="flex gap-8">
+              <label class="inline-flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  name="attendance"
+                  class="text-min-sage focus:ring-min-sage h-4 w-4"
+                  checked />
+                <span class="ml-3 text-sm font-light">Joyfully Accepts</span>
+              </label>
+              <label class="inline-flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  name="attendance"
+                  class="text-min-sage focus:ring-min-sage h-4 w-4" />
+                <span class="ml-3 text-sm font-light"
+                  >Regretfully Declines</span
+                >
+              </label>
+            </div>
+          </div>
+
+          <div class="pt-4">
+            <label
+              class="block text-xs uppercase tracking-widest text-gray-400 mb-3"
+              >Message (Optional)</label
+            >
+            <textarea class="input-minimal" rows="2"></textarea>
+          </div>
+
+          <div class="pt-8 text-center">
+            <button
+              type="submit"
+              class="btn-outline w-full md:w-auto min-w-[200px]">
+              Send RSVP
+            </button>
+          </div>
+        </form>
+
+        <div id="successMessage" class="hidden text-center py-12">
+          <p class="text-2xl font-light text-min-sage">
+            Thank you! See you at the altar.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-6 bg-white text-center border-t border-gray-100">
+      <div class="mb-8">
+        <span class="text-xl font-light tracking-widest">M & J</span>
+      </div>
+      <p class="mt-8 text-[10px] text-gray-300 uppercase tracking-widest">
+        © 2025
+      </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        once: true,
+        duration: 1000,
+        easing: 'ease-in-out',
+        offset: 50,
+      });
+
+      // Simple Mobile Menu Logic
+      const mobileBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const closeMenu = document.getElementById('close-menu');
+      const mobileLinks = document.querySelectorAll('.mobile-link');
+
+      function toggleMenu() {
+        mobileMenu.classList.toggle('hidden');
+        mobileMenu.classList.toggle('flex');
+        document.body.classList.toggle('overflow-hidden');
+      }
+
+      mobileBtn.addEventListener('click', toggleMenu);
+      closeMenu.addEventListener('click', toggleMenu);
+
+      mobileLinks.forEach((link) => {
+        link.addEventListener('click', toggleMenu);
+      });
+
+      // Form Handling
+      document
+        .getElementById('rsvpForm')
+        .addEventListener('submit', function (e) {
+          e.preventDefault();
+          const btn = this.querySelector('button');
+
+          btn.innerText = 'SENDING...';
+          btn.style.opacity = '0.5';
+
+          setTimeout(() => {
+            this.style.display = 'none';
+            document
+              .getElementById('successMessage')
+              .classList.remove('hidden');
+            document.getElementById('successMessage').classList.add('fade-in');
+          }, 1500);
+        });
+    </script>
+  </body>
+</html>
