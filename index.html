@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mhel & James | Wedding RSVP V11</title>
+    <title>Mhel & James | Wedding RSVP V12</title>
 
     <!-- Google Fonts: DM Sans (Modern, Editorial, Clean) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -788,19 +788,17 @@
           const attendees = attendanceNode ? attendanceNode.value : '';
           const name = (first + ' ' + last).trim();
 
-          if (!name || !email) {
-            alert('Please provide your name and email.');
-            btn.innerText = 'Confirm Response';
-            btn.disabled = false;
-            btn.style.opacity = '';
-            return;
-          }
-
           try {
             const res = await fetch('/.netlify/functions/submit-rsvp', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ name, email, attendees, message }),
+              body: JSON.stringify({
+                fullName: name, // <- send fullName explicitly
+                email,
+                attendance: attendees, // <- use "attendance"
+                message,
+                timestamp: new Date().toISOString(), // optional — useful in sheet
+              }),
             });
             const json = await res.json();
             if (res.ok && json.success) {
