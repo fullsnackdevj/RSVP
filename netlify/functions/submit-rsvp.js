@@ -47,7 +47,7 @@ exports.handler = async function (event) {
     const row = [name, email, attendees || '', message || ''];
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: 'Sheet1!A:D', // change to your tab name if needed
+      range: 'RESPONSES!A:D', // change to your tab name if needed
       valueInputOption: 'RAW',
       insertDataOption: 'INSERT_ROWS',
       resource: { values: [row] },
