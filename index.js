@@ -5,6 +5,7 @@
 const express = require('express');
 const { google } = require('googleapis');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 app.use(express.json());
@@ -17,6 +18,24 @@ const SHEET_ID =
 // Path to your service account credentials JSON (or set CREDENTIALS_PATH env var)
 const CREDENTIALS_PATH =
   process.env.CREDENTIALS_PATH || path.join(__dirname, 'credentials.json');
+
+// Startup checks: credentials presence and readable client_email
+if (!fs.existsSync(CREDENTIALS_PATH)) {
+  console.error(`ERROR: credentials file not found at ${CREDENTIALS_PATH}`);
+  console.error(
+    'Place your service account JSON at that path or set CREDENTIALS_PATH env var.'
+  );
+} else {
+  try {
+    const raw = fs.readFileSync(CREDENTIALS_PATH, 'utf8');
+    const parsed = JSON.parse(raw);
+    console.log(
+      `Found credentials file. Service account: ${parsed.client_email || 'N/A'}`
+    );
+  } catch (e) {
+    console.error(`ERROR reading/parsing credentials.json: ${e.message || e}`);
+  }
+}
 
 // Initialize Google Sheets client using service account key file
 async function getSheetsClient() {
@@ -41,13 +60,12 @@ app.post('/submit-rsvp', async (req, res) => {
         .json({ success: false, error: 'name and email are required' });
     }
 
-    // Map to sheet columns A = name, B = email, C = attendees, D = message
     const row = [name, email, attendees || '', message || ''];
 
     const sheets = await getSheetsClient();
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: 'Sheet1!A:D', // change sheet name/range if needed
+      range: 'RESPONSES!A:D',
       valueInputOption: 'RAW',
       insertDataOption: 'INSERT_ROWS',
       resource: { values: [row] },
@@ -55,7 +73,17 @@ app.post('/submit-rsvp', async (req, res) => {
 
     return res.json({ success: true, message: 'RSVP recorded' });
   } catch (err) {
-    console.error('Error appending to sheet:', err);
+    // improved logging for debugging
+    console.error(
+      'Error appending to sheet:',
+      err && err.stack ? err.stack : err
+    );
+    if (err && err.response && err.response.data) {
+      console.error(
+        'Google API response:',
+        JSON.stringify(err.response.data, null, 2)
+      );
+    }
     return res
       .status(500)
       .json({ success: false, error: 'internal_server_error' });

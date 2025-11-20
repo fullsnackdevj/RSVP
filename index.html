@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mhel & James | Wedding RSVP V5</title>
+    <title>Mhel & James | Wedding RSVP V6</title>
 
     <!-- Google Fonts: DM Sans (Modern, Editorial, Clean) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -584,6 +584,8 @@
                 >First Name</label
               >
               <input
+                id="firstName"
+                name="firstName"
                 type="text"
                 class="input-minimal"
                 placeholder="Enter your first name"
@@ -595,6 +597,8 @@
                 >Last Name</label
               >
               <input
+                id="lastName"
+                name="lastName"
                 type="text"
                 class="input-minimal"
                 placeholder="Enter your last name"
@@ -608,6 +612,8 @@
               >Email Address</label
             >
             <input
+              id="email"
+              name="email"
               type="email"
               class="input-minimal"
               placeholder="email@example.com"
@@ -623,27 +629,32 @@
               <label class="inline-flex items-center cursor-pointer group">
                 <div class="relative">
                   <input
+                    id="attendYes"
                     type="radio"
                     name="attendance"
+                    value="Joyfully Accepts"
                     class="peer sr-only"
                     checked />
                   <div
                     class="w-4 h-4 border border-min-charcoal rounded-full peer-checked:bg-min-charcoal transition-all"></div>
                 </div>
-                <span
-                  class="ml-3 text-sm font-light text-min-charcoal group-hover:text-min-sage transition-colors"
+                <span class="ml-3 text-sm font-light text-min-charcoal"
                   >Joyfully Accepts</span
                 >
               </label>
 
               <label class="inline-flex items-center cursor-pointer group">
                 <div class="relative">
-                  <input type="radio" name="attendance" class="peer sr-only" />
+                  <input
+                    id="attendNo"
+                    type="radio"
+                    name="attendance"
+                    value="Regretfully Declines"
+                    class="peer sr-only" />
                   <div
                     class="w-4 h-4 border border-min-charcoal rounded-full peer-checked:bg-min-charcoal transition-all"></div>
                 </div>
-                <span
-                  class="ml-3 text-sm font-light text-min-charcoal group-hover:text-min-sage transition-colors"
+                <span class="ml-3 text-sm font-light text-min-charcoal"
                   >Regretfully Declines</span
                 >
               </label>
@@ -656,6 +667,8 @@
               >Message (Optional)</label
             >
             <textarea
+              id="message"
+              name="message"
               class="input-minimal"
               rows="2"
               placeholder="Leave a note for the couple"></textarea>
@@ -663,6 +676,7 @@
 
           <div class="pt-12 text-center">
             <button
+              id="submitBtn"
               type="submit"
               class="btn-outline w-full md:w-auto min-w-[240px]">
               Confirm Response
@@ -757,23 +771,55 @@
       // Form Handling
       document
         .getElementById('rsvpForm')
-        .addEventListener('submit', function (e) {
+        .addEventListener('submit', async function (e) {
           e.preventDefault();
-          const btn = this.querySelector('button');
-          const originalText = btn.innerText;
-
+          const btn = document.getElementById('submitBtn');
           btn.innerText = 'Sending...';
-          btn.style.opacity = '0.5';
-          btn.style.cursor = 'not-allowed';
+          btn.disabled = true;
+          btn.style.opacity = '0.6';
 
-          setTimeout(() => {
-            this.style.display = 'none';
-            const successMsg = document.getElementById('successMessage');
-            successMsg.classList.remove('hidden');
+          const first = document.getElementById('firstName').value.trim();
+          const last = document.getElementById('lastName').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const message = document.getElementById('message').value.trim();
+          const attendanceNode = document.querySelector(
+            'input[name="attendance"]:checked'
+          );
+          const attendees = attendanceNode ? attendanceNode.value : '';
+          const name = (first + ' ' + last).trim();
 
-            // Scroll to success message
-            successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }, 1500);
+          if (!name || !email) {
+            alert('Please provide your name and email.');
+            btn.innerText = 'Confirm Response';
+            btn.disabled = false;
+            btn.style.opacity = '';
+            return;
+          }
+
+          try {
+            const res = await fetch('/submit-rsvp', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name, email, attendees, message }),
+            });
+            const json = await res.json();
+            if (res.ok && json.success) {
+              this.style.display = 'none';
+              document
+                .getElementById('successMessage')
+                .classList.remove('hidden');
+            } else {
+              console.error(json);
+              alert('Error saving response. Try again.');
+            }
+          } catch (err) {
+            console.error('Network error', err);
+            alert('Network error. Try again later.');
+          } finally {
+            btn.innerText = 'Confirm Response';
+            btn.disabled = false;
+            btn.style.opacity = '';
+          }
         });
     </script>
   </body>
