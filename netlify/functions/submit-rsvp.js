@@ -1,3 +1,5 @@
+const { google } = require('googleapis');
+
 exports.handler = async function (event) {
   if (event.httpMethod !== 'POST') {
     return {
@@ -9,7 +11,7 @@ exports.handler = async function (event) {
   try {
     const payload = JSON.parse(event.body || '{}');
 
-    // Validate/normalize
+    // Normalize incoming keys
     const fullName = (payload.fullName || payload.name || '').trim();
     const email = (payload.email || '').trim();
     const attendance = (payload.attendance || payload.attendees || '').trim();
@@ -26,13 +28,15 @@ exports.handler = async function (event) {
       };
     }
 
-    // IMPORTANT: Order this array to match your Google Sheet columns exactly.
-    // Example sheet columns: [Write your FULL NAME:, Email, Can you attend?, Message]
+    // MATCH THIS ORDER TO YOUR SHEET HEADER ROW
+    // Your sheet headers: [Write your FULL NAME, Email, Can you attend?, Message]
     const row = [fullName, email, attendance, message];
 
-    console.log('Appending row to sheet:', row);
-    // TODO: append `row` to Google Sheet here (googleapis / sheets.spreadsheets.values.append)
-    // If you already have Sheets code, replace the TODO above and return success only after append succeeds.
+    // Log final row (visible in function logs) before attempting append
+    console.log('Prepared row for sheet append:', row);
+
+    // Append
+    await appendToSheet(row);
 
     return {
       statusCode: 200,
@@ -45,7 +49,59 @@ exports.handler = async function (event) {
       body: JSON.stringify({
         success: false,
         message: 'Internal server error',
+        error: err.message,
       }),
     };
   }
 };
+
+async function appendToSheet(row) {
+  const auth = new google.auth.JWT(key.client_email, null, key.private_key, [
+    'https://www.googleapis.com/auth/spreadsheets',
+  ]);
+
+  const sheets = google.sheets({ version: 'v4', auth });
+
+  // EXACT tab name used in your sheet (case sensitive)
+  const range = 'Form_Responses';
+
+  console.log('About to append to sheet:', { spreadsheetId, range, row });
+
+  const res = await sheets.spreadsheets.values.append({
+    spreadsheetId,
+    range,
+    valueInputOption: 'USER_ENTERED',
+    insertDataOption: 'INSERT_ROWS',
+    requestBody: { values: [row] },
+  });
+
+  return res.data;
+}
+
+// normalize env var names (support SPREADSHEET_ID or SHEET_ID, and GOOGLE_SERVICE_ACCOUNT or GOOGLE_CREDENTIALS)
+const spreadsheetId =
+  process.env.SPREADSHEET_ID ||
+  process.env.SHEET_ID ||
+  process.env.SHEET_ID_VALUE;
+const svcJson =
+  process.env.GOOGLE_SERVICE_ACCOUNT ||
+  process.env.GOOGLE_CREDENTIALS ||
+  process.env.GOOGLE_CREDENTIAL;
+
+if (!spreadsheetId || !svcJson) {
+  throw new Error(
+    'Missing spreadsheet credentials: set SPREADSHEET_ID (or SHEET_ID) and GOOGLE_SERVICE_ACCOUNT (or GOOGLE_CREDENTIALS)'
+  );
+}
+
+let key;
+try {
+  key = typeof svcJson === 'string' ? JSON.parse(svcJson) : svcJson;
+} catch (err) {
+  throw new Error('Invalid GOOGLE_SERVICE_ACCOUNT / GOOGLE_CREDENTIALS JSON');
+}
+
+// normalize private_key newlines if pasted with \n
+if (key.private_key && key.private_key.includes('\\n')) {
+  key.private_key = key.private_key.replace(/\\n/g, '\n');
+}
