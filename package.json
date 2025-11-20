@@ -1,0 +1,14 @@
+{
+  "name": "rsvp-sheets-server",
+  "version": "1.0.0",
+  "description": "Simple Express endpoint to append RSVP submissions to Google Sheets",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "googleapis": "^140.0.0"
+  }
+}
