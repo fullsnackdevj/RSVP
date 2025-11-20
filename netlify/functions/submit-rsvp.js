@@ -1,5 +1,3 @@
-const { google } = require('googleapis');
-
 exports.handler = async function (event) {
   if (event.httpMethod !== 'POST') {
     return {
