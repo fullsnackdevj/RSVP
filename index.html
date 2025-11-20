@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mhel & James | Wedding RSVP</title>
 
-    <!-- Google Fonts: DM Sans -->
+    <!-- Google Fonts: DM Sans (Modern, Editorial, Clean) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -26,9 +26,10 @@
             colors: {
               'min-cream': '#FDFBF7',
               'min-rose': '#EACBCB',
-              'min-sage': '#9CAF88',
-              'min-charcoal': '#2A2A2A',
-              'min-gray': '#8A8A8A',
+              'min-sage': '#9CAF88', // 10% Accent
+              'min-sage-dark': '#7A8C68',
+              'min-charcoal': '#2A2A2A', // 30% Text/Structure
+              'min-gray': '#6B6B6B', // Secondary Text
             },
             fontFamily: {
               sans: ['"DM Sans"', 'sans-serif'],
@@ -42,69 +43,103 @@
     </script>
 
     <style>
-      /* Custom Utilities */
+      /* Base Styles */
       body {
         background-color: #ffffff;
         color: #2a2a2a;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
 
-      /* Button Base Style */
+      /* Button Styles - Consistent Outlines */
       .btn-outline {
+        display: inline-block;
         border: 1px solid #2a2a2a;
         background-color: transparent;
         color: #2a2a2a;
-        padding: 1rem 2.5rem;
+        padding: 1rem 3rem;
         text-transform: uppercase;
-        letter-spacing: 0.15em;
+        letter-spacing: 0.2em;
         font-size: 0.75rem;
         font-weight: 600;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: pointer;
+        text-align: center;
       }
+
       .btn-outline:hover {
         background-color: #2a2a2a;
         color: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       }
 
-      /* Minimalist Inputs */
+      /* Form Inputs - Modern Editorial Style */
       .input-minimal {
         width: 100%;
-        border: 1px solid #e5e5e5;
+        border: 0;
+        border-bottom: 1px solid #e5e5e5;
         background: transparent;
-        padding: 1rem;
+        padding: 1rem 0;
         font-family: 'DM Sans', sans-serif;
-        font-weight: 300;
-        transition: border-color 0.3s;
-        outline: none;
+        font-weight: 400;
+        color: #2a2a2a;
+        transition: all 0.3s ease;
+        border-radius: 0; /* Ensure sharp edges */
       }
+
       .input-minimal:focus {
-        border-color: #9caf88;
+        outline: none;
+        border-bottom-color: #9caf88;
+        padding-left: 0.5rem; /* Subtle movement on focus */
+      }
+
+      .input-minimal::placeholder {
+        color: #a0a0a0;
+        font-weight: 300;
+        letter-spacing: 0.05em;
+      }
+
+      /* Smooth selection color */
+      ::selection {
+        background: #9caf88;
+        color: white;
       }
     </style>
   </head>
-  <body
-    class="font-sans antialiased overflow-x-hidden text-min-charcoal selection:bg-min-sage selection:text-white">
-    <!-- Navigation: Ultra Minimal -->
+  <body class="font-sans overflow-x-hidden">
+    <!-- Navigation -->
     <nav
-      class="fixed w-full z-50 py-6 bg-white/90 backdrop-blur-sm transition-all"
+      class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-transparent"
       id="navbar">
-      <div class="max-w-7xl mx-auto px-8 flex justify-between items-center">
-        <a href="#" class="text-xl tracking-[0.2em] font-light uppercase"
+      <div
+        class="max-w-7xl mx-auto px-6 md:px-12 py-6 flex justify-between items-center">
+        <a
+          href="#"
+          class="text-lg md:text-xl tracking-[0.2em] font-light uppercase hover:opacity-70 transition-opacity"
           >Mhel & James</a
         >
 
         <!-- Desktop Links -->
         <div
-          class="hidden md:flex space-x-12 text-xs uppercase tracking-[0.15em] font-medium text-gray-500">
-          <a href="#attire" class="hover:text-min-charcoal transition-colors"
-            >Attire</a
-          >
-          <a href="#faqs" class="hover:text-min-charcoal transition-colors"
-            >FAQs</a
-          >
+          class="hidden md:flex space-x-16 text-[11px] uppercase tracking-[0.2em] font-medium text-min-gray">
+          <a
+            href="#attire"
+            class="hover:text-min-charcoal transition-colors duration-300 relative group">
+            Attire
+            <span
+              class="absolute -bottom-2 left-0 w-0 h-px bg-min-sage transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a
+            href="#faqs"
+            class="hover:text-min-charcoal transition-colors duration-300 relative group">
+            FAQs
+            <span
+              class="absolute -bottom-2 left-0 w-0 h-px bg-min-sage transition-all duration-300 group-hover:w-full"></span>
+          </a>
           <a
             href="#rsvp"
-            class="hover:text-min-sage transition-colors text-min-charcoal border-b border-transparent hover:border-min-sage pb-1"
+            class="text-min-charcoal hover:text-min-sage transition-colors font-bold"
             >RSVP</a
           >
         </div>
@@ -112,22 +147,38 @@
         <!-- Mobile Menu Icon -->
         <button
           id="mobile-menu-btn"
-          class="md:hidden space-y-1.5 group focus:outline-none">
+          class="md:hidden space-y-1.5 p-2 group focus:outline-none">
           <div
-            class="w-6 h-px bg-min-charcoal transition-all group-hover:w-4"></div>
-          <div class="w-6 h-px bg-min-charcoal"></div>
+            class="w-6 h-px bg-min-charcoal transition-all duration-300 group-hover:w-4 ml-auto"></div>
           <div
-            class="w-6 h-px bg-min-charcoal transition-all group-hover:w-4 ml-auto"></div>
+            class="w-6 h-px bg-min-charcoal transition-all duration-300"></div>
+          <div
+            class="w-6 h-px bg-min-charcoal transition-all duration-300 group-hover:w-4 ml-auto"></div>
         </button>
       </div>
+
       <!-- Mobile Menu Overlay -->
       <div
         id="mobile-menu"
-        class="fixed inset-0 bg-white z-40 hidden flex-col justify-center items-center space-y-8 text-xl uppercase tracking-widest font-light">
-        <a href="#attire" class="mobile-link hover:text-min-sage">Attire</a>
-        <a href="#faqs" class="mobile-link hover:text-min-sage">FAQs</a>
-        <a href="#rsvp" class="mobile-link hover:text-min-sage">RSVP</a>
-        <button id="close-menu" class="absolute top-8 right-8 text-3xl">
+        class="fixed inset-0 bg-white z-40 hidden flex-col justify-center items-center space-y-10 opacity-0 transition-opacity duration-300">
+        <a
+          href="#attire"
+          class="mobile-link text-2xl uppercase tracking-widest font-light hover:text-min-sage transition-colors"
+          >Attire</a
+        >
+        <a
+          href="#faqs"
+          class="mobile-link text-2xl uppercase tracking-widest font-light hover:text-min-sage transition-colors"
+          >FAQs</a
+        >
+        <a
+          href="#rsvp"
+          class="mobile-link text-2xl uppercase tracking-widest font-bold text-min-charcoal hover:text-min-sage transition-colors"
+          >RSVP</a
+        >
+        <button
+          id="close-menu"
+          class="absolute top-8 right-8 p-4 text-4xl font-light hover:rotate-90 transition-transform">
           &times;
         </button>
       </div>
@@ -135,170 +186,218 @@
 
     <!-- Hero Section -->
     <header
-      class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20">
-      <div data-aos="fade-up" data-aos-duration="1200">
+      class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-24 relative">
+      <div
+        class="max-w-4xl mx-auto"
+        data-aos="fade-up"
+        data-aos-duration="1200">
         <p
-          class="text-xs md:text-sm uppercase tracking-[0.4em] text-gray-400 mb-8">
+          class="text-xs md:text-sm uppercase tracking-[0.4em] text-min-gray mb-10">
           Bear witness to our special day
         </p>
 
         <h1
-          class="text-6xl md:text-8xl font-light leading-tight mb-6 tracking-tight">
-          MHEL <span class="text-min-sage font-thin">&</span> JAMES
+          class="text-6xl md:text-8xl lg:text-9xl font-extralight leading-[0.9] mb-8 tracking-tighter text-min-charcoal">
+          MHEL
+          <span class="text-min-sage font-thin align-top text-4xl md:text-6xl"
+            >&</span
+          >
+          JAMES
         </h1>
 
-        <p
-          class="text-lg md:text-xl font-light text-gray-500 mb-8 tracking-wide">
-          January 04, 2025 <span class="mx-4 text-gray-300">|</span> White Plate
-        </p>
+        <div
+          class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-min-gray font-light text-lg md:text-xl tracking-wide mb-16">
+          <span>January 04, 2025</span>
+          <span class="hidden md:inline text-min-rose">•</span>
+          <span>White Plate</span>
+        </div>
 
-        <p class="text-xs uppercase tracking-[0.2em] text-gray-400 mb-16">
-          2402 Katipunan Ext, Quezon City
-        </p>
-
-        <div class="flex flex-col md:flex-row gap-6 justify-center">
-          <a href="#rsvp" class="btn-outline"> RSVP Now </a>
+        <div
+          class="flex flex-col md:flex-row gap-6 justify-center items-center w-full">
+          <a href="#rsvp" class="btn-outline min-w-[200px]"> RSVP Now </a>
           <a
             href="#attire"
-            class="text-xs uppercase tracking-[0.2em] border-b border-gray-300 pb-1 hover:border-gray-800 hover:text-gray-800 transition-all text-gray-400 self-center mt-4 md:mt-0">
-            View Attire
+            class="text-[10px] uppercase tracking-[0.25em] border-b border-transparent hover:border-min-charcoal transition-all text-min-gray hover:text-min-charcoal py-1">
+            View Dress Code
           </a>
         </div>
       </div>
 
-      <!-- Quote from Image -->
+      <!-- Bottom Text / Quote -->
       <div
-        class="absolute bottom-12 text-center px-4 opacity-60"
+        class="absolute bottom-12 w-full text-center px-6"
         data-aos="fade-in"
-        data-aos-delay="500">
-        <p class="text-sm md:text-base italic font-light">
-          "Your presence at our wedding is the only present we require."
+        data-aos-delay="600">
+        <p class="text-xs uppercase tracking-[0.3em] text-min-gray">
+          2402 Katipunan Ext, Quezon City
         </p>
       </div>
     </header>
 
-    <!-- Image Section (Couple) -->
-    <section class="py-20 px-6">
-      <div class="max-w-7xl mx-auto relative">
+    <!-- Cinematic Image Section -->
+    <section class="w-full px-4 md:px-8 pb-20 md:pb-32">
+      <div class="max-w-[1600px] mx-auto">
         <div
-          class="aspect-[16/9] md:aspect-[21/9] overflow-hidden"
-          data-aos="zoom-in">
-          <!-- Placeholder for the image from the file (Couple holding hands/rings) -->
+          class="aspect-[16/10] md:aspect-[21/9] overflow-hidden bg-gray-100"
+          data-aos="zoom-in"
+          data-aos-duration="1500">
+          <!-- Using a 'wedding hands' placeholder -->
           <img
-            src="https://placehold.co/1920x800/EACBCB/fff?text=Mhel+and+James"
-            class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" />
+            src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070&auto=format&fit=crop"
+            alt="Mhel and James"
+            class="w-full h-full object-cover grayscale opacity-90 hover:grayscale-0 hover:opacity-100 transition-all duration-[2s] ease-out scale-105 hover:scale-100" />
         </div>
       </div>
     </section>
 
-    <!-- Attire Section -->
-    <section id="attire" class="py-32 bg-min-cream">
-      <div class="max-w-4xl mx-auto px-6 text-center">
+    <!-- Attire Section (Detailed & Structured) -->
+    <section
+      id="attire"
+      class="py-20 md:py-32 bg-min-cream border-t border-gray-100">
+      <div class="max-w-5xl mx-auto px-6 text-center">
+        <!-- Eyebrow -->
         <span
-          class="text-xs uppercase tracking-[0.3em] text-gray-400 block mb-6"
-          >Dress Code</span
+          class="text-xs font-bold uppercase tracking-[0.3em] text-min-sage block mb-6"
+          >The Aesthetics</span
         >
-        <h2 class="text-4xl md:text-5xl font-light mb-12">
+
+        <h2 class="text-3xl md:text-5xl font-light mb-10 text-min-charcoal">
           Formal / Semi-Formal
         </h2>
 
+        <div class="w-12 h-px bg-min-charcoal mx-auto mb-10"></div>
+
         <p
-          class="text-gray-500 font-light leading-loose text-lg mb-16 max-w-2xl mx-auto">
-          In celebration of our Union and Forever Wedding, we kindly request our
-          guests to honor the formality of the event. Please wear pastel or
-          neutral tones.
+          class="text-min-gray font-light leading-loose text-base md:text-lg mb-20 max-w-2xl mx-auto">
+          In celebration of our Union, we kindly request our guests to honor the
+          formality of the event by wearing
+          <span class="text-min-charcoal font-normal"
+            >pastel or neutral tones</span
+          >. We want you to look and feel your best.
         </p>
 
-        <!-- Color Palette Swatches -->
-        <div class="flex justify-center gap-8 mb-16" data-aos="fade-up">
-          <div class="flex flex-col items-center gap-3">
-            <div class="w-16 h-16 bg-[#EACBCB] border border-gray-200"></div>
-            <span class="text-[10px] uppercase tracking-widest text-gray-400"
+        <!-- Color Palette - Larger & Interactive -->
+        <div
+          class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-20 max-w-3xl mx-auto"
+          data-aos="fade-up">
+          <div class="group flex flex-col items-center gap-4">
+            <div
+              class="w-24 h-24 md:w-32 md:h-32 bg-[#EACBCB] shadow-sm transition-transform duration-500 group-hover:-translate-y-2"></div>
+            <span
+              class="text-[11px] uppercase tracking-[0.2em] text-min-charcoal group-hover:text-min-sage transition-colors"
               >Blush</span
             >
           </div>
-          <div class="flex flex-col items-center gap-3">
-            <div class="w-16 h-16 bg-[#F5E6D3] border border-gray-200"></div>
-            <span class="text-[10px] uppercase tracking-widest text-gray-400"
+          <div class="group flex flex-col items-center gap-4">
+            <div
+              class="w-24 h-24 md:w-32 md:h-32 bg-[#F5E6D3] shadow-sm transition-transform duration-500 group-hover:-translate-y-2"></div>
+            <span
+              class="text-[11px] uppercase tracking-[0.2em] text-min-charcoal group-hover:text-min-sage transition-colors"
               >Cream</span
             >
           </div>
-          <div class="flex flex-col items-center gap-3">
-            <div class="w-16 h-16 bg-[#9CAF88] border border-gray-200"></div>
-            <span class="text-[10px] uppercase tracking-widest text-gray-400"
+          <div class="group flex flex-col items-center gap-4">
+            <div
+              class="w-24 h-24 md:w-32 md:h-32 bg-[#9CAF88] shadow-sm transition-transform duration-500 group-hover:-translate-y-2"></div>
+            <span
+              class="text-[11px] uppercase tracking-[0.2em] text-min-charcoal group-hover:text-min-sage transition-colors"
               >Sage</span
             >
           </div>
-          <div class="flex flex-col items-center gap-3">
-            <div class="w-16 h-16 bg-[#D8E2DC] border border-gray-200"></div>
-            <span class="text-[10px] uppercase tracking-widest text-gray-400"
+          <div class="group flex flex-col items-center gap-4">
+            <div
+              class="w-24 h-24 md:w-32 md:h-32 bg-[#D8E2DC] shadow-sm transition-transform duration-500 group-hover:-translate-y-2"></div>
+            <span
+              class="text-[11px] uppercase tracking-[0.2em] text-min-charcoal group-hover:text-min-sage transition-colors"
               >Mist</span
             >
           </div>
         </div>
 
-        <div class="p-8 border border-min-charcoal/10 inline-block">
+        <div
+          class="inline-block border border-min-charcoal/20 px-10 py-6"
+          data-aos="fade-up"
+          data-aos-delay="100">
           <p
-            class="text-xs uppercase tracking-[0.2em] mb-4 text-min-charcoal font-medium">
-            Please Avoid
+            class="text-[10px] uppercase tracking-[0.25em] mb-2 text-min-charcoal font-bold">
+            Kindly Avoid
           </p>
-          <p class="text-sm text-gray-500 font-light">
+          <p class="text-sm text-min-gray font-light italic">
             White, Bright Red, and Neon Colors
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Entourage / Wordings Section -->
-    <section class="py-32 px-6">
+    <!-- Wedding Party (Two Column Editorial) -->
+    <section class="py-20 md:py-32 px-6 bg-white">
       <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-20">
-          <h2 class="text-3xl font-light tracking-wide">The Wedding Party</h2>
+        <div class="text-center mb-20" data-aos="fade-up">
+          <span
+            class="text-xs font-bold uppercase tracking-[0.3em] text-min-sage block mb-4"
+            >The People</span
+          >
+          <h2 class="text-3xl md:text-4xl font-light text-min-charcoal">
+            Wedding Party
+          </h2>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-20 text-center md:text-left">
+        <div class="grid md:grid-cols-2 gap-16 md:gap-32 relative">
+          <!-- Vertical Divider for Desktop -->
+          <div
+            class="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gray-100 -ml-px"></div>
+
           <!-- Principal Sponsors -->
-          <div data-aos="fade-up">
+          <div
+            class="text-center md:text-right space-y-8"
+            data-aos="fade-right">
             <h3
-              class="text-sm uppercase tracking-[0.2em] text-min-sage mb-8 font-bold">
+              class="text-sm uppercase tracking-[0.25em] text-min-charcoal font-bold border-b border-gray-100 pb-4 inline-block md:block">
               Principal Sponsors
             </h3>
-            <ul class="space-y-4 text-gray-500 font-light text-lg">
+            <ul
+              class="space-y-4 text-min-gray font-light text-lg leading-relaxed">
               <li>Mr. Juan Dela Cruz</li>
               <li>Ms. Maria Clara</li>
               <li>Mr. Jose Rizal</li>
               <li>Mrs. Leonor Rivera</li>
-              <!-- Add more from actual content if legible -->
             </ul>
           </div>
 
-          <!-- Secondary Sponsors / Bridesmaids -->
-          <div data-aos="fade-up" data-aos-delay="100">
+          <!-- Entourage -->
+          <div class="text-center md:text-left space-y-10" data-aos="fade-left">
             <h3
-              class="text-sm uppercase tracking-[0.2em] text-min-sage mb-8 font-bold">
+              class="text-sm uppercase tracking-[0.25em] text-min-charcoal font-bold border-b border-gray-100 pb-4 inline-block md:block">
               The Entourage
             </h3>
-            <div class="space-y-8">
+
+            <div class="grid gap-8">
               <div>
                 <p
-                  class="text-min-charcoal font-medium uppercase text-xs tracking-widest mb-2">
+                  class="text-[10px] uppercase tracking-[0.2em] text-min-sage mb-1">
                   Maid of Honor
                 </p>
-                <p class="text-gray-500 font-light">Anna Beatrice</p>
+                <p class="text-xl font-light text-min-charcoal">
+                  Anna Beatrice
+                </p>
               </div>
               <div>
                 <p
-                  class="text-min-charcoal font-medium uppercase text-xs tracking-widest mb-2">
+                  class="text-[10px] uppercase tracking-[0.2em] text-min-sage mb-1">
                   Best Man
                 </p>
-                <p class="text-gray-500 font-light">Marco Antonio</p>
+                <p class="text-xl font-light text-min-charcoal">
+                  Marco Antonio
+                </p>
               </div>
               <div>
                 <p
-                  class="text-min-charcoal font-medium uppercase text-xs tracking-widest mb-2">
+                  class="text-[10px] uppercase tracking-[0.2em] text-min-sage mb-1">
                   Bridesmaids
                 </p>
-                <p class="text-gray-500 font-light">Julia, Sarah, Mika</p>
+                <p class="text-lg font-light text-min-gray">
+                  Julia, Sarah, Mika
+                </p>
               </div>
             </div>
           </div>
@@ -306,66 +405,74 @@
       </div>
     </section>
 
-    <!-- FAQs Section -->
-    <section id="faqs" class="py-32 bg-min-cream px-6">
+    <!-- FAQs Section (Clean Typography) -->
+    <section
+      id="faqs"
+      class="py-20 md:py-32 bg-min-cream px-6 border-t border-gray-100">
       <div class="max-w-4xl mx-auto">
-        <div class="text-center mb-24">
+        <div class="mb-20 md:mb-28">
           <span
-            class="text-xs uppercase tracking-[0.3em] text-gray-400 block mb-4"
-            >Information</span
+            class="text-xs font-bold uppercase tracking-[0.3em] text-min-sage block mb-4"
+            >Details</span
           >
-          <h2 class="text-3xl md:text-4xl font-light">
+          <h2 class="text-3xl md:text-4xl font-light text-min-charcoal">
             Frequently Asked Questions
           </h2>
         </div>
 
-        <div class="space-y-12">
+        <div class="space-y-0">
           <!-- Q1 -->
           <div
-            class="grid md:grid-cols-12 gap-6 border-b border-gray-200 pb-12"
+            class="group py-10 border-b border-gray-200 grid md:grid-cols-12 gap-6 transition-colors hover:bg-white/50"
             data-aos="fade-up">
-            <div class="md:col-span-4">
-              <h3 class="text-lg font-medium text-min-charcoal">
+            <div class="md:col-span-5">
+              <h3
+                class="text-lg font-medium text-min-charcoal group-hover:text-min-sage transition-colors">
                 What time should we arrive?
               </h3>
             </div>
-            <div class="md:col-span-8">
-              <p class="text-gray-500 font-light leading-relaxed">
-                The ceremony will start promptly at 3:00 PM. We kindly request
-                that guests arrive at least 30 minutes early to be seated
-                comfortably.
+            <div class="md:col-span-7">
+              <p class="text-min-gray font-light leading-relaxed">
+                The ceremony will start promptly at
+                <strong class="text-min-charcoal font-normal">3:00 PM</strong>.
+                We kindly request that guests arrive at least 30 minutes early
+                to be seated comfortably.
               </p>
             </div>
           </div>
 
           <!-- Q2 -->
           <div
-            class="grid md:grid-cols-12 gap-6 border-b border-gray-200 pb-12"
+            class="group py-10 border-b border-gray-200 grid md:grid-cols-12 gap-6 transition-colors hover:bg-white/50"
             data-aos="fade-up">
-            <div class="md:col-span-4">
-              <h3 class="text-lg font-medium text-min-charcoal">
+            <div class="md:col-span-5">
+              <h3
+                class="text-lg font-medium text-min-charcoal group-hover:text-min-sage transition-colors">
                 Where is the event?
               </h3>
             </div>
-            <div class="md:col-span-8">
-              <p class="text-gray-500 font-light leading-relaxed">
-                Both the ceremony and reception will be held at White Plate,
-                2402 Katipunan Ext, Quezon City.
+            <div class="md:col-span-7">
+              <p class="text-min-gray font-light leading-relaxed">
+                Both the ceremony and reception will be held at
+                <strong class="text-min-charcoal font-normal"
+                  >White Plate</strong
+                >, 2402 Katipunan Ext, Quezon City.
               </p>
             </div>
           </div>
 
           <!-- Q3 -->
           <div
-            class="grid md:grid-cols-12 gap-6 border-b border-gray-200 pb-12"
+            class="group py-10 border-b border-gray-200 grid md:grid-cols-12 gap-6 transition-colors hover:bg-white/50"
             data-aos="fade-up">
-            <div class="md:col-span-4">
-              <h3 class="text-lg font-medium text-min-charcoal">
+            <div class="md:col-span-5">
+              <h3
+                class="text-lg font-medium text-min-charcoal group-hover:text-min-sage transition-colors">
                 Can I bring a +1?
               </h3>
             </div>
-            <div class="md:col-span-8">
-              <p class="text-gray-500 font-light leading-relaxed">
+            <div class="md:col-span-7">
+              <p class="text-min-gray font-light leading-relaxed">
                 We have reserved seats for the number of guests stated in your
                 invitation to keep our wedding intimate.
               </p>
@@ -374,32 +481,34 @@
 
           <!-- Q4 -->
           <div
-            class="grid md:grid-cols-12 gap-6 border-b border-gray-200 pb-12"
+            class="group py-10 border-b border-gray-200 grid md:grid-cols-12 gap-6 transition-colors hover:bg-white/50"
             data-aos="fade-up">
-            <div class="md:col-span-4">
-              <h3 class="text-lg font-medium text-min-charcoal">
+            <div class="md:col-span-5">
+              <h3
+                class="text-lg font-medium text-min-charcoal group-hover:text-min-sage transition-colors">
                 Are children allowed?
               </h3>
             </div>
-            <div class="md:col-span-8">
-              <p class="text-gray-500 font-light leading-relaxed">
+            <div class="md:col-span-7">
+              <p class="text-min-gray font-light leading-relaxed">
                 We love your little ones, however, this is an adults-only affair
-                unless specified in the invitation. Thank you for understanding.
+                unless specified in the invitation.
               </p>
             </div>
           </div>
 
           <!-- Q5 -->
           <div
-            class="grid md:grid-cols-12 gap-6 border-b border-gray-200 pb-12"
+            class="group py-10 border-b border-gray-200 grid md:grid-cols-12 gap-6 transition-colors hover:bg-white/50"
             data-aos="fade-up">
-            <div class="md:col-span-4">
-              <h3 class="text-lg font-medium text-min-charcoal">
+            <div class="md:col-span-5">
+              <h3
+                class="text-lg font-medium text-min-charcoal group-hover:text-min-sage transition-colors">
                 Is parking available?
               </h3>
             </div>
-            <div class="md:col-span-8">
-              <p class="text-gray-500 font-light leading-relaxed">
+            <div class="md:col-span-7">
+              <p class="text-min-gray font-light leading-relaxed">
                 Yes, parking is available at the venue. We recommend carpooling
                 where possible.
               </p>
@@ -409,102 +518,143 @@
       </div>
     </section>
 
-    <!-- RSVP Section -->
-    <section
-      id="rsvp"
-      class="py-40 px-6 bg-white relative border-t border-gray-100">
+    <!-- RSVP Section (Clean Form) -->
+    <section id="rsvp" class="py-20 md:py-32 px-6 bg-white relative">
       <div class="max-w-2xl mx-auto">
         <div class="text-center mb-16">
-          <h2 class="text-4xl font-light mb-4">R.S.V.P.</h2>
-          <p class="text-gray-500 font-light">
-            We kindly request your response by November 30, 2024
+          <h2 class="text-4xl md:text-5xl font-light mb-4 text-min-charcoal">
+            R.S.V.P.
+          </h2>
+          <p class="text-min-gray font-light tracking-wide">
+            We kindly request your response by
+            <span
+              class="text-min-charcoal border-b border-min-charcoal/20 pb-0.5"
+              >November 30, 2024</span
+            >
           </p>
         </div>
 
-        <form id="rsvpForm" class="space-y-8">
-          <div class="grid md:grid-cols-2 gap-8">
+        <form id="rsvpForm" class="space-y-12">
+          <div class="grid md:grid-cols-2 gap-10">
             <div>
               <label
-                class="block text-xs uppercase tracking-widest text-gray-400 mb-3"
+                class="block text-[10px] uppercase tracking-[0.2em] text-min-gray mb-2"
                 >First Name</label
               >
-              <input type="text" class="input-minimal" required />
+              <input
+                type="text"
+                class="input-minimal"
+                placeholder="Enter your first name"
+                required />
             </div>
             <div>
               <label
-                class="block text-xs uppercase tracking-widest text-gray-400 mb-3"
+                class="block text-[10px] uppercase tracking-[0.2em] text-min-gray mb-2"
                 >Last Name</label
               >
-              <input type="text" class="input-minimal" required />
+              <input
+                type="text"
+                class="input-minimal"
+                placeholder="Enter your last name"
+                required />
             </div>
           </div>
 
           <div>
             <label
-              class="block text-xs uppercase tracking-widest text-gray-400 mb-3"
+              class="block text-[10px] uppercase tracking-[0.2em] text-min-gray mb-2"
               >Email Address</label
             >
-            <input type="email" class="input-minimal" required />
+            <input
+              type="email"
+              class="input-minimal"
+              placeholder="email@example.com"
+              required />
           </div>
 
-          <div class="pt-4">
+          <div class="pt-6">
             <span
-              class="block text-xs uppercase tracking-widest text-gray-400 mb-4"
+              class="block text-[10px] uppercase tracking-[0.2em] text-min-gray mb-6"
               >Attendance</span
             >
-            <div class="flex gap-8">
-              <label class="inline-flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name="attendance"
-                  class="text-min-sage focus:ring-min-sage h-4 w-4"
-                  checked />
-                <span class="ml-3 text-sm font-light">Joyfully Accepts</span>
+            <div class="flex flex-col md:flex-row gap-8">
+              <label class="inline-flex items-center cursor-pointer group">
+                <div class="relative">
+                  <input
+                    type="radio"
+                    name="attendance"
+                    class="peer sr-only"
+                    checked />
+                  <div
+                    class="w-4 h-4 border border-min-charcoal rounded-full peer-checked:bg-min-charcoal transition-all"></div>
+                </div>
+                <span
+                  class="ml-3 text-sm font-light text-min-charcoal group-hover:text-min-sage transition-colors"
+                  >Joyfully Accepts</span
+                >
               </label>
-              <label class="inline-flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name="attendance"
-                  class="text-min-sage focus:ring-min-sage h-4 w-4" />
-                <span class="ml-3 text-sm font-light"
+
+              <label class="inline-flex items-center cursor-pointer group">
+                <div class="relative">
+                  <input type="radio" name="attendance" class="peer sr-only" />
+                  <div
+                    class="w-4 h-4 border border-min-charcoal rounded-full peer-checked:bg-min-charcoal transition-all"></div>
+                </div>
+                <span
+                  class="ml-3 text-sm font-light text-min-charcoal group-hover:text-min-sage transition-colors"
                   >Regretfully Declines</span
                 >
               </label>
             </div>
           </div>
 
-          <div class="pt-4">
+          <div class="pt-6">
             <label
-              class="block text-xs uppercase tracking-widest text-gray-400 mb-3"
+              class="block text-[10px] uppercase tracking-[0.2em] text-min-gray mb-2"
               >Message (Optional)</label
             >
-            <textarea class="input-minimal" rows="2"></textarea>
+            <textarea
+              class="input-minimal"
+              rows="2"
+              placeholder="Leave a note for the couple"></textarea>
           </div>
 
-          <div class="pt-8 text-center">
+          <div class="pt-12 text-center">
             <button
               type="submit"
-              class="btn-outline w-full md:w-auto min-w-[200px]">
-              Send RSVP
+              class="btn-outline w-full md:w-auto min-w-[240px]">
+              Confirm Response
             </button>
           </div>
         </form>
 
-        <div id="successMessage" class="hidden text-center py-12">
-          <p class="text-2xl font-light text-min-sage">
-            Thank you! See you at the altar.
+        <!-- Success Message -->
+        <div
+          id="successMessage"
+          class="hidden text-center py-12 bg-min-cream mt-8 animate-pulse">
+          <p class="text-2xl font-light text-min-charcoal">Thank you.</p>
+          <p class="text-sm text-min-gray mt-2 font-light">
+            Your response has been recorded.
           </p>
         </div>
       </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-12 px-6 bg-white text-center border-t border-gray-100">
-      <div class="mb-8">
-        <span class="text-xl font-light tracking-widest">M & J</span>
+    <footer class="py-16 px-6 bg-white text-center border-t border-gray-100">
+      <div class="mb-10">
+        <span class="text-2xl font-light tracking-[0.3em] text-min-charcoal"
+          >MHEL & JAMES</span
+        >
       </div>
-      <p class="mt-8 text-[10px] text-gray-300 uppercase tracking-widest">
-        © 2025
+      <div
+        class="flex justify-center gap-10 text-[10px] uppercase tracking-[0.2em] text-min-gray">
+        <a href="#" class="hover:text-min-sage transition-colors">Instagram</a>
+        <a href="#" class="hover:text-min-sage transition-colors">Registry</a>
+        <a href="#" class="hover:text-min-sage transition-colors">Contact</a>
+      </div>
+      <p class="mt-10 text-[9px] text-gray-300 uppercase tracking-[0.3em]">
+        Designed with Love © 2025
       </p>
     </footer>
 
@@ -513,21 +663,33 @@
     <script>
       AOS.init({
         once: true,
-        duration: 1000,
-        easing: 'ease-in-out',
-        offset: 50,
+        duration: 1200,
+        easing: 'ease-out-cubic',
+        offset: 60,
       });
 
-      // Simple Mobile Menu Logic
+      // Mobile Menu Logic
       const mobileBtn = document.getElementById('mobile-menu-btn');
       const mobileMenu = document.getElementById('mobile-menu');
       const closeMenu = document.getElementById('close-menu');
       const mobileLinks = document.querySelectorAll('.mobile-link');
 
       function toggleMenu() {
-        mobileMenu.classList.toggle('hidden');
-        mobileMenu.classList.toggle('flex');
-        document.body.classList.toggle('overflow-hidden');
+        const isHidden = mobileMenu.classList.contains('hidden');
+        if (isHidden) {
+          mobileMenu.classList.remove('hidden');
+          // Small delay to allow display:flex to apply before opacity transition
+          setTimeout(() => {
+            mobileMenu.classList.remove('opacity-0');
+          }, 10);
+          document.body.classList.add('overflow-hidden');
+        } else {
+          mobileMenu.classList.add('opacity-0');
+          setTimeout(() => {
+            mobileMenu.classList.add('hidden');
+          }, 300); // Wait for opacity transition
+          document.body.classList.remove('overflow-hidden');
+        }
       }
 
       mobileBtn.addEventListener('click', toggleMenu);
@@ -537,22 +699,38 @@
         link.addEventListener('click', toggleMenu);
       });
 
+      // Sticky Nav Style
+      window.addEventListener('scroll', () => {
+        const nav = document.getElementById('navbar');
+        if (window.scrollY > 50) {
+          nav.classList.add('shadow-sm', 'py-4');
+          nav.classList.remove('py-6', 'border-transparent');
+          nav.classList.add('border-gray-100');
+        } else {
+          nav.classList.remove('shadow-sm', 'py-4', 'border-gray-100');
+          nav.classList.add('py-6', 'border-transparent');
+        }
+      });
+
       // Form Handling
       document
         .getElementById('rsvpForm')
         .addEventListener('submit', function (e) {
           e.preventDefault();
           const btn = this.querySelector('button');
+          const originalText = btn.innerText;
 
-          btn.innerText = 'SENDING...';
+          btn.innerText = 'Sending...';
           btn.style.opacity = '0.5';
+          btn.style.cursor = 'not-allowed';
 
           setTimeout(() => {
             this.style.display = 'none';
-            document
-              .getElementById('successMessage')
-              .classList.remove('hidden');
-            document.getElementById('successMessage').classList.add('fade-in');
+            const successMsg = document.getElementById('successMessage');
+            successMsg.classList.remove('hidden');
+
+            // Scroll to success message
+            successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
           }, 1500);
         });
     </script>
