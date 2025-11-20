@@ -1,77 +1,29 @@
 const { google } = require('googleapis');
 
 exports.handler = async function (event) {
-  // Allow preflight
-  if (event.httpMethod === 'OPTIONS') {
+  if (event.httpMethod !== 'POST') {
     return {
-      statusCode: 204,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      },
+      statusCode: 405,
+      body: JSON.stringify({ success: false, message: 'Method Not Allowed' }),
     };
   }
 
   try {
-    const body = event.body ? JSON.parse(event.body) : {};
-    const { name, email, attendees, message } = body;
-    if (!name || !email)
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          success: false,
-          error: 'name and email required',
-        }),
-        headers: { 'Access-Control-Allow-Origin': '*' },
-      };
-
-    // Read sheet id and credentials from env vars
-    const SHEET_ID = process.env.SHEET_ID;
-    if (!SHEET_ID) throw new Error('Missing SHEET_ID env var');
-
-    // GOOGLE_CREDENTIALS must be base64 of the service account JSON
-    const credsB64 = process.env.GOOGLE_CREDENTIALS;
-    if (!credsB64) throw new Error('Missing GOOGLE_CREDENTIALS env var');
-    const creds = JSON.parse(Buffer.from(credsB64, 'base64').toString('utf8'));
-
-    const auth = new google.auth.GoogleAuth({
-      credentials: creds,
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    });
-    const sheets = google.sheets({
-      version: 'v4',
-      auth: await auth.getClient(),
-    });
-
-    const row = [name, email, attendees || '', message || ''];
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: SHEET_ID,
-      range: 'RESPONSES!A:D', // change to your tab name if needed
-      valueInputOption: 'RAW',
-      insertDataOption: 'INSERT_ROWS',
-      resource: { values: [row] },
-    });
+    const payload = JSON.parse(event.body || '{}');
+    // TODO: validate and save payload (e.g., write to DB or send to email)
+    console.log('RSVP payload:', payload);
 
     return {
       statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: JSON.stringify({ success: true, message: 'RSVP recorded' }),
+      body: JSON.stringify({ success: true }),
     };
   } catch (err) {
-    console.error('Function error:', err && (err.stack || err));
+    console.error('Function error', err);
     return {
       statusCode: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
       body: JSON.stringify({
         success: false,
-        error: err.message || 'server_error',
+        message: 'Internal server error',
       }),
     };
   }
