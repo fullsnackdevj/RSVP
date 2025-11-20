@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mhel & James | Wedding RSVP V6</title>
+    <title>Mhel & James | Wedding RSVP V7</title>
 
     <!-- Google Fonts: DM Sans (Modern, Editorial, Clean) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -797,7 +797,7 @@
           }
 
           try {
-            const res = await fetch('/submit-rsvp', {
+            const res = await fetch('/.netlify/functions/submit-rsvp', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ name, email, attendees, message }),
