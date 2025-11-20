@@ -1,25 +1,24 @@
 // Simple Express server that appends RSVP rows to a Google Sheet.
-//
-// NOTE:
-// - Replace the placeholder SHEET_ID below with your Google Sheet ID
-//   OR set process.env.SHEET_ID before running.
-// - Provide a service account JSON key file (credentials.json) and
-//   place its path in CREDENTIALS_PATH or set GOOGLE_APPLICATION_CREDENTIALS env var.
+// - Make sure your service account key file is at ./credentials.json (or set CREDENTIALS_PATH)
+// - The SHEET_ID below is set from the Sheet URL you provided.
 
 const express = require('express');
 const { google } = require('googleapis');
 const path = require('path');
 
 const app = express();
-app.use(express.json()); // parse application/json
-app.use(express.urlencoded({ extended: true })); // parse application/x-www-form-urlencoded
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Configuration: change these or provide environment variables.
-const SHEET_ID = process.env.SHEET_ID || 'YOUR_SHEET_ID_HERE'; // <-- Insert your Sheet ID here
+// Replace/confirm: extracted Sheet ID from your URL
+const SHEET_ID =
+  process.env.SHEET_ID || '1AZOp_Rz0y2367_IhTlv-DoNzWg2Ja6Mku69ko4dLVRI';
+
+// Path to your service account credentials JSON (or set CREDENTIALS_PATH env var)
 const CREDENTIALS_PATH =
-  process.env.CREDENTIALS_PATH || path.join(__dirname, 'credentials.json'); // <-- path to service account key file
+  process.env.CREDENTIALS_PATH || path.join(__dirname, 'credentials.json');
 
-// Initialize Google Sheets client using a service account key file
+// Initialize Google Sheets client using service account key file
 async function getSheetsClient() {
   const auth = new google.auth.GoogleAuth({
     keyFile: CREDENTIALS_PATH,
@@ -31,47 +30,44 @@ async function getSheetsClient() {
 }
 
 // POST /submit-rsvp
-// Expected body fields: name, email, attendees, message
+// Expected JSON body: { name, email, attendees, message }
 app.post('/submit-rsvp', async (req, res) => {
   try {
     const { name, email, attendees, message } = req.body;
 
-    // Basic validation
     if (!name || !email) {
       return res
         .status(400)
         .json({ success: false, error: 'name and email are required' });
     }
 
-    // Map fields to Sheet columns: A = name, B = email, C = attendees, D = message
+    // Map to sheet columns A = name, B = email, C = attendees, D = message
     const row = [name, email, attendees || '', message || ''];
 
     const sheets = await getSheetsClient();
-
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
       range: 'Sheet1!A:D', // change sheet name/range if needed
       valueInputOption: 'RAW',
       insertDataOption: 'INSERT_ROWS',
-      resource: {
-        values: [row],
-      },
+      resource: { values: [row] },
     });
 
     return res.json({ success: true, message: 'RSVP recorded' });
   } catch (err) {
-    console.error('Error appending to sheet:', err.message || err);
+    console.error('Error appending to sheet:', err);
     return res
       .status(500)
       .json({ success: false, error: 'internal_server_error' });
   }
 });
 
-// Start server
+// Optional: serve static files from project root (so index.html can POST to same origin during dev)
+app.use(express.static(path.join(__dirname)));
+
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
   console.log(`RSVP Sheets server listening on port ${PORT}`);
-  console.log(
-    `Ensure SHEET_ID is set and credentials file is at: ${CREDENTIALS_PATH}`
-  );
+  console.log(`SHEET_ID=${SHEET_ID}`);
+  console.log(`CREDENTIALS_PATH=${CREDENTIALS_PATH}`);
 });
