@@ -88,6 +88,14 @@ const svcJson =
   process.env.GOOGLE_CREDENTIALS ||
   process.env.GOOGLE_CREDENTIAL;
 
+// Diagnostic logs (do not print private_key)
+console.log('ENV check:', {
+  SPREADSHEET_ID_present: !!process.env.SPREADSHEET_ID,
+  SHEET_ID_present: !!process.env.SHEET_ID,
+  GOOGLE_SERVICE_ACCOUNT_present: !!process.env.GOOGLE_SERVICE_ACCOUNT,
+  GOOGLE_CREDENTIALS_present: !!process.env.GOOGLE_CREDENTIALS,
+});
+
 if (!spreadsheetId || !svcJson) {
   throw new Error(
     'Missing spreadsheet credentials: set SPREADSHEET_ID (or SHEET_ID) and GOOGLE_SERVICE_ACCOUNT (or GOOGLE_CREDENTIALS)'
@@ -97,6 +105,11 @@ if (!spreadsheetId || !svcJson) {
 let key;
 try {
   key = typeof svcJson === 'string' ? JSON.parse(svcJson) : svcJson;
+  // Safe to log only the client_email for debugging
+  console.log(
+    'Service account client_email:',
+    key.client_email || '<missing client_email>'
+  );
 } catch (err) {
   throw new Error('Invalid GOOGLE_SERVICE_ACCOUNT / GOOGLE_CREDENTIALS JSON');
 }
