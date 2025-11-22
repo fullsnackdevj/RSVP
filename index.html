@@ -877,33 +877,24 @@
           btn.style.opacity = '0.6';
 
           try {
-            // Build urlencoded body (simple content-type => no preflight)
             const fd = new FormData(form);
-            const fullName = (
-              (fd.get('firstName') || '') +
+            const payload = Object.fromEntries(fd.entries());
+            payload.fullName = (
+              (payload.firstName || '') +
               ' ' +
-              (fd.get('lastName') || '')
+              (payload.lastName || '')
             ).trim();
-            fd.set('fullName', fullName);
-            fd.set('timestamp', new Date().toISOString());
+            payload.timestamp = new Date().toISOString();
 
-            const params = new URLSearchParams();
-            for (const [k, v] of fd.entries()) params.append(k, v);
-
-            console.debug(
-              'POST (urlencoded) to',
-              GOOGLE_SCRIPT_URL,
-              'body:',
-              params.toString().slice(0, 200)
-            );
+            // Log the message value so you can verify locally
+            console.debug('message field (full):', payload.message);
 
             const res = await fetch(GOOGLE_SCRIPT_URL, {
               method: 'POST',
               headers: {
-                'Content-Type':
-                  'application/x-www-form-urlencoded;charset=UTF-8',
+                'Content-Type': 'application/json;charset=UTF-8',
               },
-              body: params.toString(),
+              body: JSON.stringify(payload),
             });
 
             console.debug('Fetch status:', res.status, 'ok:', res.ok);
@@ -916,17 +907,12 @@
                 .getElementById('successMessage')
                 .classList.remove('hidden');
             } else {
-              console.error('Server returned non-OK', res.status);
-              alert(
-                'Error saving response. Server returned: ' +
-                  res.status +
-                  '. See console for details.'
-              );
+              alert('Error saving response. Server returned: ' + res.status);
             }
           } catch (err) {
             console.error('Network/CORS error', err);
             alert(
-              'Network error or CORS issue. Open DevTools (Cmd+Option+I) → Network and Console, submit again, and paste the request/response here.'
+              'Network error. Check Console → Network and Console for details.'
             );
           } finally {
             btn.innerText = originalBtnText;
