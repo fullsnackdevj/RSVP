@@ -898,10 +898,17 @@
             console.debug('Response body:', text);
 
             if (res.ok) {
+              // show thank-you message
               form.style.display = 'none';
               document
                 .getElementById('successMessage')
                 .classList.remove('hidden');
+
+              // reload page after 1.5s to return to default RSVP state
+              setTimeout(() => {
+                // a full reload ensures the form resets and any transient UI returns to default
+                window.location.reload();
+              }, 1500);
             } else {
               alert('Error saving response. Server returned: ' + res.status);
             }
