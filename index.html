@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mhel & James | Wedding RSVP v2</title>
+    <title>Mhel & James | Wedding RSVP v3</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -928,9 +928,11 @@
                 if (seconds <= 0) clearInterval(timer);
               }, 1000);
 
-              // reload page after 5 seconds
+              // reload page after 5 seconds — navigate to site root (no hash)
               setTimeout(() => {
-                window.location.reload();
+                window.location.replace(
+                  'https://mhel-and-james-wedding-rsvp.netlify.app/'
+                );
               }, 5000);
             } else {
               alert('Error saving response. Server returned: ' + res.status);
