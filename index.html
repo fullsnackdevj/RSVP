@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mhel & James | Wedding RSVP V41</title>
+    <title>Mhel & James | Wedding RSVP V42</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -863,61 +863,39 @@
 
       // Form Handling - use urlencoded body to avoid preflight/CORS issues
       const GOOGLE_SCRIPT_URL =
-        'https://script.google.com/macros/s/AKfycby9m5jmbBhI8vEpVedMpfWhHt_whsPlO1ZbNrcVf7cCX7Z1fHyjlRzDg-zEu6DpWxY/exec';
+        'https://script.google.com/macros/s/AKfycbxKe4v8rci2a-fZQY5eGPpF04x8gG9VKrqt4nubgWVt1QhXThmZ9s2XVPO61ndD_010/exec';
 
       document
         .getElementById('rsvpForm')
         .addEventListener('submit', async function (e) {
           e.preventDefault();
-          const form = this;
-          const btn = document.getElementById('submitBtn');
-          const originalBtnText = btn.innerText;
-          btn.innerText = 'Sending...';
-          btn.disabled = true;
-          btn.style.opacity = '0.6';
+          const fd = new FormData(this);
+          const payload = Object.fromEntries(fd.entries());
+          payload.timestamp = new Date().toISOString();
+          payload.fullName = (
+            (payload.firstName || '') +
+            ' ' +
+            (payload.lastName || '')
+          ).trim();
+          console.debug('Outgoing payload:', payload);
 
-          try {
-            const fd = new FormData(form);
-            const payload = Object.fromEntries(fd.entries());
-            payload.fullName = (
-              (payload.firstName || '') +
-              ' ' +
-              (payload.lastName || '')
-            ).trim();
-            payload.timestamp = new Date().toISOString();
+          const res = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            body: JSON.stringify(payload),
+          });
 
-            // Log the message value so you can verify locally
-            console.debug('message field (full):', payload.message);
+          console.debug('Response status:', res.status);
+          const text = await res.text().catch(() => '');
+          console.debug('Response body:', text);
 
-            const res = await fetch(GOOGLE_SCRIPT_URL, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-              },
-              body: JSON.stringify(payload),
-            });
-
-            console.debug('Fetch status:', res.status, 'ok:', res.ok);
-            const text = await res.text().catch(() => '');
-            console.debug('Response (first 200 chars):', text.slice(0, 200));
-
-            if (res.ok) {
-              form.style.display = 'none';
-              document
-                .getElementById('successMessage')
-                .classList.remove('hidden');
-            } else {
-              alert('Error saving response. Server returned: ' + res.status);
-            }
-          } catch (err) {
-            console.error('Network/CORS error', err);
-            alert(
-              'Network error. Check Console → Network and Console for details.'
-            );
-          } finally {
-            btn.innerText = originalBtnText;
-            btn.disabled = false;
-            btn.style.opacity = '';
+          if (res.ok) {
+            this.style.display = 'none';
+            document
+              .getElementById('successMessage')
+              .classList.remove('hidden');
+          } else {
+            alert('Error saving response. Server returned: ' + res.status);
           }
         });
     </script>
