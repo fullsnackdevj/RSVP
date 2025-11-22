@@ -740,12 +740,13 @@
       });
 
       // Form Handling - UPDATED FOR GOOGLE APPS SCRIPT
+      const GOOGLE_SCRIPT_URL =
+        'https://script.google.com/macros/s/AKfycbze-3gBK6ixStuRhKZMkJslOqbZWtL1vtsgD--B9WIR0Qq7D5oZG4Anl7ewgsjO3OiewQ/exec';
+
       document
         .getElementById('rsvpForm')
         .addEventListener('submit', async function (e) {
           e.preventDefault();
-          const GOOGLE_SCRIPT_URL =
-            'https://script.google.com/macros/s/AKfycbze-3gBK6ixStuRhKZMkJslOqbZWtL1vtsgD--B9WIR0Qq7D5oZG4Anl7ewgsjO3OiewQ/exec';
 
           const form = this;
           const btn = document.getElementById('submitBtn');
@@ -758,34 +759,32 @@
           // Collect form data using FormData API
           const formData = new FormData(form);
 
-          // Add Full Name and Timestamp for convenience in the sheet
+          // Add Full Name and ISO Timestamp for convenience in the sheet
           const fullName = (
-            formData.get('firstName') +
+            (formData.get('firstName') || '') +
             ' ' +
-            formData.get('lastName')
+            (formData.get('lastName') || '')
           ).trim();
           formData.set('fullName', fullName);
-          formData.set('timestamp', new Date().toLocaleString());
+          formData.set('timestamp', new Date().toISOString());
 
           try {
             const res = await fetch(GOOGLE_SCRIPT_URL, {
               method: 'POST',
               body: formData, // Send the FormData object directly
-              // Note: Content-Type header is automatically set for FormData
             });
 
-            // The response from Google Apps Script is usually a success indicator
             if (res.ok) {
-              // Assuming the script successfully processed the request
-              // You might want to parse the response if your script returns custom JSON
               form.style.display = 'none';
               document
                 .getElementById('successMessage')
                 .classList.remove('hidden');
             } else {
-              console.error('Server response not OK', res);
+              const text = await res.text().catch(() => '');
+              console.error('Server response not OK', res.status, text);
               alert(
-                'Error saving response. The server responded with an issue.'
+                'Error saving response. The server responded with status: ' +
+                  res.status
               );
             }
           } catch (err) {
