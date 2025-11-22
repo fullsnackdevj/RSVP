@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mhel & James | Wedding RSVP V30</title>
+    <title>Mhel & James | Wedding RSVP V31</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -638,34 +638,31 @@
               class="block text-[10px] uppercase tracking-[0.2em] text-min-gray mb-6"
               >Attendance</span
             >
-            <div class="flex flex-col md:flex-row gap-8">
+            <div class="flex flex-col md:flex-row gap-8 items-center">
               <label class="inline-flex items-center cursor-pointer group">
-                <div class="relative">
-                  <input
-                    id="attendYes"
-                    type="radio"
-                    name="attendance"
-                    value="Joyfully Accepts"
-                    class="peer sr-only"
-                    checked />
-                </div>
+                <!-- removed 'sr-only' so the radio is visible -->
+                <input
+                  id="attendYes"
+                  type="radio"
+                  name="attendance"
+                  value="Joyfully Accepts"
+                  class="peer mr-3"
+                  checked />
                 <span
                   class="text-sm font-medium text-min-charcoal group-hover:text-min-sage transition-colors">
                   Joyfully Accepts
                 </span>
               </label>
-              <label class="inline-flex items-center cursor-pointer group">
-                <div class="relative">
-                  <input
-                    id="attendNo"
-                    type="radio"
-                    name="attendance"
-                    value="Regretfully Declines"
-                    class="peer sr-only"
-                    disabled />
-                </div>
-                <span
-                  class="text-sm font-medium text-min-gray line-through cursor-not-allowed">
+
+              <label class="inline-flex items-center cursor-not-allowed group">
+                <input
+                  id="attendNo"
+                  type="radio"
+                  name="attendance"
+                  value="Regretfully Declines"
+                  class="peer mr-3"
+                  disabled />
+                <span class="text-sm font-medium text-min-gray line-through">
                   Regretfully Declines
                 </span>
               </label>
