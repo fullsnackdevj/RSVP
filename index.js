@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Replace/confirm: extracted Sheet ID from your URL
 const SHEET_ID =
-  process.env.SHEET_ID || '1AZOp_Rz0y2367_IhTlv-DoNzWg2Ja6Mku69ko4dLVRI';
+  process.env.SHEET_ID || '17J6YPimGOkna7qYKX7Q6MibKcSVqp2ZylMqAXNsDEXQ';
 
 // Path to your service account credentials JSON (or set CREDENTIALS_PATH env var)
 const CREDENTIALS_PATH =
@@ -65,7 +65,7 @@ app.post('/submit-rsvp', async (req, res) => {
     const sheets = await getSheetsClient();
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: 'RESPONSES!A:D',
+      range: 'Sheet1A:D',
       valueInputOption: 'RAW',
       insertDataOption: 'INSERT_ROWS',
       resource: { values: [row] },
