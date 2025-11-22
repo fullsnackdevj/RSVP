@@ -48,6 +48,24 @@
         -moz-osx-font-smoothing: grayscale;
       }
 
+      /* Prevent horizontal overflow on all devices */
+      html,
+      body {
+        max-width: 100%;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      /* Ensure mobile menu covers viewport without introducing horizontal scroll */
+      #mobile-menu {
+        box-sizing: border-box;
+        width: 100vw;
+        left: 0;
+        right: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
       /* Button Styles - Consistent Outlines */
       .btn-outline {
         display: inline-block;
@@ -109,7 +127,7 @@
       class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-transparent"
       id="navbar">
       <div
-        class="max-w-7xl mx-auto px-6 md:px-12 py-6 flex justify-between items-center">
+        class="max-w-7xl mx-auto px-6 md:px-12 py-6 flex justify-between items-center relative">
         <a
           href="#"
           class="text-lg md:text-xl tracking-[0.2em] font-light uppercase hover:opacity-70 transition-opacity"
@@ -139,12 +157,12 @@
           >
         </div>
 
-        <!-- Mobile menu button (visible) -->
+        <!-- Mobile menu button (visible, anchored top-right on mobile) -->
         <button
           id="mobile-menu-btn"
           aria-label="Open menu"
           aria-expanded="false"
-          class="md:hidden p-2 rounded bg-[#07100f] text-white z-60 focus:outline-none">
+          class="md:hidden p-2 rounded bg-[#07100f] text-white z-60 focus:outline-none absolute right-6 top-4 md:static">
           <svg
             class="w-6 h-6"
             viewBox="0 0 24 24"
@@ -163,7 +181,9 @@
       <!-- Mobile menu (simple, full-viewport dark overlay) -->
       <div
         id="mobile-menu"
-        class="fixed inset-0 z-70 hidden bg-[#07100f] text-white h-screen px-6 py-8">
+        role="dialog"
+        aria-modal="true"
+        class="fixed inset-0 z-70 hidden bg-[#07100f] text-white h-screen px-6 py-8 w-screen left-0 box-border">
         <button
           id="close-menu"
           aria-label="Close menu"
@@ -788,13 +808,17 @@
         function openMenu() {
           if (!mobileMenu) return;
           mobileMenu.classList.remove('hidden');
-          // fade-in
+          // ensure overlay uses viewport width (avoid 100% + padding causing scroll)
+          mobileMenu.style.width = '100vw';
+          mobileMenu.style.left = '0';
           mobileMenu.style.opacity = '0';
           requestAnimationFrame(() => {
             mobileMenu.style.transition = 'opacity 220ms ease';
             mobileMenu.style.opacity = '1';
           });
-          document.body.classList.add('overflow-hidden');
+          // lock both documentElement + body scroll for robustness on some browsers
+          document.documentElement.style.overflow = 'hidden';
+          document.body.style.overflow = 'hidden';
           mobileBtn.setAttribute('aria-expanded', 'true');
         }
 
@@ -802,7 +826,9 @@
           if (!mobileMenu) return;
           mobileMenu.style.opacity = '0';
           mobileBtn.setAttribute('aria-expanded', 'false');
-          document.body.classList.remove('overflow-hidden');
+          // release scroll lock
+          document.documentElement.style.overflow = '';
+          document.body.style.overflow = '';
           setTimeout(() => {
             mobileMenu.classList.add('hidden');
           }, 240);
