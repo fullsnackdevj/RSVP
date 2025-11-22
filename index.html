@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mhel & James | Wedding RSVP V20</title>
+    <title>Mhel & James | Wedding RSVP V21</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -739,7 +739,7 @@
         }
       });
 
-      // Form Handling - UPDATED FOR GOOGLE APPS SCRIPT (verbose logging)
+      // Form Handling - use urlencoded body to avoid preflight/CORS issues
       const GOOGLE_SCRIPT_URL =
         'https://script.google.com/macros/s/AKfycbze-3gBK6ixStuRhKZMkJslOqbZWtL1vtsgD--B9WIR0Qq7D5oZG4Anl7ewgsjO3OiewQ/exec';
 
@@ -747,82 +747,62 @@
         .getElementById('rsvpForm')
         .addEventListener('submit', async function (e) {
           e.preventDefault();
-
           const form = this;
           const btn = document.getElementById('submitBtn');
           const originalBtnText = btn.innerText;
-
           btn.innerText = 'Sending...';
           btn.disabled = true;
           btn.style.opacity = '0.6';
 
-          const formData = new FormData(form);
-
-          const fullName = (
-            (formData.get('firstName') || '') +
-            ' ' +
-            (formData.get('lastName') || '')
-          ).trim();
-          formData.set('fullName', fullName);
-          formData.set('timestamp', new Date().toISOString());
-
           try {
-            console.debug('Submitting to', GOOGLE_SCRIPT_URL);
-            // Show the form data in console (non-sensitive)
-            for (const pair of formData.entries()) {
-              console.debug('formData:', pair[0], '=', pair[1]);
-            }
+            // Build urlencoded body (simple content-type => no preflight)
+            const fd = new FormData(form);
+            const fullName = (
+              (fd.get('firstName') || '') +
+              ' ' +
+              (fd.get('lastName') || '')
+            ).trim();
+            fd.set('fullName', fullName);
+            fd.set('timestamp', new Date().toISOString());
+
+            const params = new URLSearchParams();
+            for (const [k, v] of fd.entries()) params.append(k, v);
+
+            console.debug(
+              'POST (urlencoded) to',
+              GOOGLE_SCRIPT_URL,
+              'body:',
+              params.toString().slice(0, 200)
+            );
 
             const res = await fetch(GOOGLE_SCRIPT_URL, {
               method: 'POST',
-              body: formData,
-              // Don't set Content-Type manually when sending FormData
+              headers: {
+                'Content-Type':
+                  'application/x-www-form-urlencoded;charset=UTF-8',
+              },
+              body: params.toString(),
             });
 
-            console.debug(
-              'Fetch completed. status:',
-              res.status,
-              'ok:',
-              res.ok,
-              'type:',
-              res.type,
-              'url:',
-              res.url
-            );
-
-            // Try to read response text (can be JSON or HTML if misconfigured)
-            const contentType = res.headers.get('content-type') || '';
+            console.debug('Fetch status:', res.status, 'ok:', res.ok);
             const text = await res.text().catch(() => '');
-            console.debug(
-              'Response text (first 200 chars):',
-              text.slice(0, 200)
-            );
+            console.debug('Response (first 200 chars):', text.slice(0, 200));
 
             if (res.ok) {
-              // If server returned JSON, log it
-              if (contentType.indexOf('application/json') !== -1) {
-                try {
-                  const json = JSON.parse(text || '{}');
-                  console.debug('Response JSON:', json);
-                } catch (parseErr) {
-                  console.warn('Could not parse response JSON', parseErr);
-                }
-              }
               form.style.display = 'none';
               document
                 .getElementById('successMessage')
                 .classList.remove('hidden');
             } else {
-              console.error('Server responded with non-OK status', res.status);
+              console.error('Server returned non-OK', res.status);
               alert(
                 'Error saving response. Server returned: ' +
                   res.status +
-                  '\nSee console for details.'
+                  '. See console for details.'
               );
             }
           } catch (err) {
-            // Network or CORS failure
-            console.error('Network/CORS error during submission', err);
+            console.error('Network/CORS error', err);
             alert(
               'Network error or CORS issue. Open DevTools (Cmd+Option+I) → Network and Console, submit again, and paste the request/response here.'
             );
