@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mhel & James | Wedding RSVP V42</title>
+    <title>Mhel & James | Wedding RSVP V43</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -869,33 +869,45 @@
         .getElementById('rsvpForm')
         .addEventListener('submit', async function (e) {
           e.preventDefault();
-          const fd = new FormData(this);
-          const payload = Object.fromEntries(fd.entries());
-          payload.timestamp = new Date().toISOString();
-          payload.fullName = (
-            (payload.firstName || '') +
+          const form = this;
+          const fd = new FormData(form);
+          const payloadObj = Object.fromEntries(fd.entries());
+          payloadObj.timestamp = new Date().toISOString();
+          payloadObj.fullName = (
+            (payloadObj.firstName || '') +
             ' ' +
-            (payload.lastName || '')
+            (payloadObj.lastName || '')
           ).trim();
-          console.debug('Outgoing payload:', payload);
 
-          const res = await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-            body: JSON.stringify(payload),
-          });
+          // convert to urlencoded string to avoid CORS preflight
+          const urlEncoded = new URLSearchParams(payloadObj).toString();
+          console.debug('Outgoing urlencoded payload:', urlEncoded);
 
-          console.debug('Response status:', res.status);
-          const text = await res.text().catch(() => '');
-          console.debug('Response body:', text);
+          try {
+            const res = await fetch(GOOGLE_SCRIPT_URL, {
+              method: 'POST',
+              headers: {
+                'Content-Type':
+                  'application/x-www-form-urlencoded;charset=UTF-8',
+              },
+              body: urlEncoded,
+            });
 
-          if (res.ok) {
-            this.style.display = 'none';
-            document
-              .getElementById('successMessage')
-              .classList.remove('hidden');
-          } else {
-            alert('Error saving response. Server returned: ' + res.status);
+            console.debug('Response status:', res.status);
+            const text = await res.text().catch(() => '');
+            console.debug('Response body:', text);
+
+            if (res.ok) {
+              form.style.display = 'none';
+              document
+                .getElementById('successMessage')
+                .classList.remove('hidden');
+            } else {
+              alert('Error saving response. Server returned: ' + res.status);
+            }
+          } catch (err) {
+            console.error('Network / fetch error:', err);
+            alert('Network error. Check Console → Network for details.');
           }
         });
     </script>
