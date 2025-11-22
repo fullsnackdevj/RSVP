@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mhel & James | Wedding RSVP V31</title>
+    <title>Mhel & James | Wedding RSVP V32</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -640,7 +640,6 @@
             >
             <div class="flex flex-col md:flex-row gap-8 items-center">
               <label class="inline-flex items-center cursor-pointer group">
-                <!-- removed 'sr-only' so the radio is visible -->
                 <input
                   id="attendYes"
                   type="radio"
@@ -654,15 +653,14 @@
                 </span>
               </label>
 
-              <label class="inline-flex items-center cursor-not-allowed group">
+              <label class="inline-flex items-center cursor-pointer group">
                 <input
                   id="attendNo"
                   type="radio"
                   name="attendance"
                   value="Regretfully Declines"
-                  class="peer mr-3"
-                  disabled />
-                <span class="text-sm font-medium text-min-gray line-through">
+                  class="peer mr-3" />
+                <span class="text-sm font-medium text-min-gray">
                   Regretfully Declines
                 </span>
               </label>
