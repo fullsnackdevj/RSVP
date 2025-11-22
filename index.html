@@ -89,6 +89,31 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       }
 
+      /* New: Dark solid button for RSVP */
+      .btn-dark {
+        display: inline-block;
+        border: 1px solid #222222;
+        background-color: #222222;
+        color: #ffffff;
+        padding: 1rem 3rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-size: 0.75rem;
+        font-weight: 600;
+        transition: all 0.35s ease;
+        cursor: pointer;
+        text-align: center;
+      }
+
+      /* Hover: switch to outlined appearance (transparent bg, black text/border) */
+      .btn-dark:hover {
+        background-color: transparent;
+        color: #222222;
+        transform: translateY(-1px);
+        box-shadow: none;
+        border-color: #222222;
+      }
+
       /* Form Inputs - Modern Editorial Style */
       .input-minimal {
         width: 100%;
@@ -249,7 +274,7 @@
 
         <div
           class="flex flex-col md:flex-row gap-6 justify-center items-center w-full">
-          <a href="#rsvp" class="btn-outline min-w-[200px]"> RSVP Now </a>
+          <a href="#rsvp" class="btn-dark min-w-[200px]"> RSVP Now </a>
           <a
             href="#attire"
             class="text-[10px] uppercase tracking-[0.25em] border-b border-transparent hover:border-min-charcoal transition-all text-min-gray hover:text-min-charcoal py-1">
