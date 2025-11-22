@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mhel & James | Wedding RSVP v1</title>
+    <title>Mhel & James | Wedding RSVP v2</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -803,6 +803,15 @@
         duration: 1200,
         easing: 'ease-out-cubic',
         offset: 60,
+      });
+
+      // After a reload triggered by RSVP, ensure the page is at the top
+      window.addEventListener('load', function () {
+        if (sessionStorage.getItem('rsvp_reload')) {
+          sessionStorage.removeItem('rsvp_reload');
+          // force scroll to top (instant)
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        }
       });
 
       // Mobile menu: full-viewport dark overlay with 3 links (ATTIRE, FAQS, RSVP)
