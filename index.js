@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Replace/confirm: extracted Sheet ID from your URL
 const SHEET_ID =
-  process.env.SHEET_ID || '17J6YPimGOkna7qYKX7Q6MibKcSVqp2ZylMqAXNsDEXQ';
+  process.env.SHEET_ID || '1KnaOqA8eMczgW2DzHY3hz_TH3GtMNx9H1DuiVMeUlC4';
 
 // Path to your service account credentials JSON (or set CREDENTIALS_PATH env var)
 const CREDENTIALS_PATH =
