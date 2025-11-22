@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mhel & James | Wedding RSVP</title>
+    <title>Mhel & James | Wedding RSVP v1</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -768,6 +768,9 @@
           <p class="text-sm text-[#1f2937] mt-2 font-medium">
             Your response has been recorded.
           </p>
+          <p id="reloadCountdown" class="text-xs text-[#1f2937] mt-4">
+            This page will reload in 5 seconds.
+          </p>
         </div>
       </div>
     </section>
@@ -900,15 +903,26 @@
             if (res.ok) {
               // show thank-you message
               form.style.display = 'none';
-              document
-                .getElementById('successMessage')
-                .classList.remove('hidden');
+              const successEl = document.getElementById('successMessage');
+              const countdownEl = document.getElementById('reloadCountdown');
+              successEl.classList.remove('hidden');
 
-              // reload page after 1.5s to return to default RSVP state
+              // start 5s countdown and update text
+              let seconds = 5;
+              countdownEl.textContent = `This page will reload in ${seconds} seconds.`;
+              const timer = setInterval(() => {
+                seconds -= 1;
+                countdownEl.textContent =
+                  seconds > 0
+                    ? `This page will reload in ${seconds} seconds.`
+                    : 'Reloading...';
+                if (seconds <= 0) clearInterval(timer);
+              }, 1000);
+
+              // reload page after 5 seconds
               setTimeout(() => {
-                // a full reload ensures the form resets and any transient UI returns to default
                 window.location.reload();
-              }, 1500);
+              }, 5000);
             } else {
               alert('Error saving response. Server returned: ' + res.status);
             }
