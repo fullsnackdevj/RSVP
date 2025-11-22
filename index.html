@@ -144,7 +144,7 @@
           id="mobile-menu-btn"
           aria-label="Open menu"
           aria-expanded="false"
-          class="md:hidden p-2 rounded bg-[#0f1a17] text-white z-60 focus:outline-none">
+          class="md:hidden p-2 rounded bg-[#07100f] text-white z-60 focus:outline-none">
           <svg
             class="w-6 h-6"
             viewBox="0 0 24 24"
@@ -160,10 +160,10 @@
         </button>
       </div>
 
-      <!-- Mobile menu (simple, dark, centered vertical links) -->
+      <!-- Mobile menu (simple, full-viewport dark overlay) -->
       <div
         id="mobile-menu"
-        class="fixed inset-0 z-70 hidden bg-[#0b1211] text-white px-6 py-8 transition-opacity duration-240">
+        class="fixed inset-0 z-70 hidden bg-[#07100f] text-white h-screen px-6 py-8">
         <button
           id="close-menu"
           aria-label="Close menu"
@@ -172,28 +172,21 @@
         </button>
 
         <nav
-          class="h-full w-full max-w-sm mx-auto flex flex-col justify-center items-center gap-8">
+          class="h-full w-full flex flex-col justify-center items-center gap-10">
           <a
             href="#attire"
-            class="mobile-link block text-2xl uppercase tracking-widest font-medium text-white hover:opacity-85"
-            >Attire</a
+            class="mobile-link block text-2xl uppercase tracking-widest font-medium text-white"
+            >ATTIRE</a
           >
           <a
             href="#faqs"
-            class="mobile-link block text-2xl uppercase tracking-widest font-medium text-white hover:opacity-85"
-            >FAQs</a
+            class="mobile-link block text-2xl uppercase tracking-widest font-medium text-white"
+            >FAQS</a
           >
           <a
             href="#rsvp"
-            class="mobile-link block text-2xl uppercase tracking-widest font-bold text-white hover:opacity-85"
+            class="mobile-link block text-2xl uppercase tracking-widest font-bold text-white"
             >RSVP</a
-          >
-          <a
-            href="https://maps.app.goo.gl/yu4q273K8VYgJusY8"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mobile-link block text-base tracking-wide text-min-cream hover:opacity-85"
-            >White Plate, Katipunan</a
           >
         </nav>
       </div>
@@ -785,7 +778,7 @@
         offset: 60,
       });
 
-      // Mobile menu: simple open/close with body scroll lock
+      // Mobile menu: full-viewport dark overlay with 3 links (ATTIRE, FAQS, RSVP)
       (function () {
         const mobileBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
@@ -795,10 +788,10 @@
         function openMenu() {
           if (!mobileMenu) return;
           mobileMenu.classList.remove('hidden');
+          // fade-in
           mobileMenu.style.opacity = '0';
-          // small delay to allow transition
           requestAnimationFrame(() => {
-            mobileMenu.style.transition = 'opacity 200ms ease';
+            mobileMenu.style.transition = 'opacity 220ms ease';
             mobileMenu.style.opacity = '1';
           });
           document.body.classList.add('overflow-hidden');
@@ -810,20 +803,16 @@
           mobileMenu.style.opacity = '0';
           mobileBtn.setAttribute('aria-expanded', 'false');
           document.body.classList.remove('overflow-hidden');
-          // hide after transition
           setTimeout(() => {
             mobileMenu.classList.add('hidden');
-          }, 220);
+          }, 240);
         }
 
         if (mobileBtn) mobileBtn.addEventListener('click', openMenu);
         if (closeMenu) closeMenu.addEventListener('click', closeMenuFn);
-
-        mobileLinks.forEach((link) => {
-          link.addEventListener('click', closeMenuFn);
-        });
-
-        // Close on Escape
+        mobileLinks.forEach((link) =>
+          link.addEventListener('click', closeMenuFn)
+        );
         window.addEventListener('keydown', (e) => {
           if (e.key === 'Escape') closeMenuFn();
         });
