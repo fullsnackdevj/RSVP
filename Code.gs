@@ -1,6 +1,6 @@
 /**
- * Server-side script for RSVP form
- * Updated deployment info included as constants (for reference).
+ * RSVP Apps Script - robust JSON + form handler
+ * Update: uses provided spreadsheet and deployment constants.
  */
 
 const SPREADSHEET_ID = '1KnaOqA8eMczgW2DzHY3hz_TH3GtMNx9H1DuiVMeUlC4';
@@ -20,15 +20,15 @@ function doPost(e) {
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
     const sheet = ss.getSheetByName('Responses') || ss.getSheets()[0];
 
-    // Log raw incoming body for debugging (check View → Executions / Logs)
+    // Log incoming raw postData for debugging (check Executions / Logs)
     try {
       Logger.log('Raw postData: %s', JSON.stringify(e.postData || {}));
     } catch (logErr) {
       Logger.log('postData logging error: ' + String(logErr));
     }
 
-    // Support JSON body (from client) and fallback to urlencoded parameters
-    var data = {};
+    // Parse JSON body if present, otherwise fallback to e.parameter (urlencoded/form)
+    let data = {};
     if (
       e.postData &&
       e.postData.type &&
@@ -37,8 +37,8 @@ function doPost(e) {
       try {
         data = JSON.parse(e.postData.contents || '{}');
       } catch (jsonErr) {
-        data = {};
         Logger.log('JSON parse error: ' + String(jsonErr));
+        data = {};
       }
     } else {
       data = e.parameter || {};
@@ -49,12 +49,16 @@ function doPost(e) {
     const timestamp = data.timestamp || new Date().toISOString();
     const firstName = (data.firstName || '').toString().trim();
     const lastName = (data.lastName || '').toString().trim();
-    const email = data.email || '';
-    const attendance = data.attendance || '';
-    const message = data.message || '';
-    const fullName = data.fullName || (firstName + ' ' + lastName).trim();
+    const email = (data.email || '').toString().trim();
+    const attendance = (data.attendance || '').toString().trim();
+    // preserve full message text (no trimming) to avoid accidental truncation
+    const message =
+      typeof data.message === 'string' ? data.message : data.message || '';
+    const fullName =
+      (data.fullName && data.fullName.toString().trim()) ||
+      (firstName + ' ' + lastName).trim();
 
-    // Append a new row
+    // Append a new row — use appendRow to preserve full content
     const values = [
       timestamp,
       firstName,
